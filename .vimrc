@@ -44,9 +44,9 @@
 
     " GUI stuff
     set shortmess+=I
-    colorscheme solarized
     if has('gui_running')
-        set vb t_vb=
+        set vb=
+        set t_vb=
         set background=light
         set guioptions-=m
         set guioptions-=T
@@ -54,6 +54,7 @@
         set guioptions+=b
         set guicursor+=a:blinkon0 " do not blink cursor
         set guifont=Input\ Mono\ 10
+        colorscheme solarized
     else
         set background=dark
     endif
@@ -63,6 +64,8 @@
     " File related
     set fileformat=unix
     set fileformats=unix,dos
+    set fileencoding=utf-8
+    set fileencodings=utf-8,gbk
     set encoding=utf-8
     set nobackup
     set noswapfile
@@ -75,6 +78,7 @@
     set ignorecase
     set history=1000
     set laststatus=2
+    set showcmd
 
     set conceallevel=2
     set concealcursor=nc
@@ -95,7 +99,7 @@
     " When 'wrap' is off, use '»' as the last column to indicate a wrap
     set listchars=extends:»
     " Indent the wrapped line
-    set breakindent
+    " set breakindent
     " When 'wrap' is on, use '» ' in the next line to indicate a wrap
     exec "set showbreak=\u00BB"
     set showbreak=\ 
@@ -125,8 +129,8 @@
     iabbrev todo TODO
     iabbrev fixme FIXME
 
-    iabbrev ;; ::
-    iabbrev -- ->
+    inoremap ;; ::
+    inoremap -- ->
 
     " Pair
     inoremap '' ''<ESC>i
@@ -135,12 +139,6 @@
     inoremap () ()<ESC>i
     inoremap [] []<ESC>i
     inoremap {} {}<ESC>i
-
-    noremap ` <ESC>mqgEwi'<ESC>Ea'<ESC>`ql<ESC>:delmark q<CR>:echom 'Quote WORD with single quotes'<CR>
-    noremap `` <ESC>mqgEwi"<ESC>Ea"<ESC>`ql<ESC>:delmark q<CR>:echom 'Quote WORD with double quotes'<CR>
-    noremap ``` <ESC>mqgEwr'<ESC>Er'<ESC>`q<ESC>:delmark q<CR>:echom 'Change double quotes to single quotes'<CR>
-    noremap ```` <ESC>mqgEwr"<ESC>Er"<ESC>`q<ESC>:delmark q<CR>:echom 'Change single quotes to double quotes'<CR>
-    noremap `1 <ESC>mqgEwx<ESC>Ex<ESC>`qh<ESC>:delmark q<CR>:echom 'Remove quotes'<CR>
 
     nnoremap ; :
     vnoremap ; :
@@ -170,12 +168,17 @@
     noremap <F9>  <ESC>:set wrap!<CR>
     noremap <F12>  <ESC>:w<CR>:!start cmd /c python "%" & pause<CR>
     noremap <C-F12> :!python<CR>
+    noremap <F11> :silent !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'<CR>
 
     " Movement
-    noremap <silent> <A-k> :wincmd k<CR>
-    noremap <silent> <A-j> :wincmd j<CR>
-    noremap <silent> <A-h> :wincmd h<CR>
-    noremap <silent> <A-l> :wincmd l<CR>
+    " noremap <silent> <A-k> :wincmd k<CR>
+    " noremap <silent> <A-j> :wincmd j<CR>
+    " noremap <silent> <A-h> :wincmd h<CR>
+    " noremap <silent> <A-l> :wincmd l<CR>
+    noremap <silent> <S-k> :wincmd k<CR>
+    noremap <silent> <S-j> :wincmd j<CR>
+    noremap <silent> <S-h> :wincmd h<CR>
+    noremap <silent> <S-l> :wincmd l<CR>
     noremap <C-j> <ESC>:bn<CR>
     noremap <C-k> <ESC>:bp<CR>
     noremap <C-l> <ESC>:tabnext<CR>
@@ -288,6 +291,9 @@
 " Easytags {{{
     set tags=tags;/,codex.tags;/
     let g:easytags_auto_highlight=0
+    let g:easytags_auto_update = 0
+    let g:easytags_autorecurse = 1
+
 
     let g:easytags_languages =
     \ {'haskell':
@@ -322,7 +328,7 @@
 "}}}
 
 " For These File Types {{{
-    autocmd FileType haskell,python,css,html,dart,javascript,sql autocmd BufWritePre <buffer> :%s/\s\+$//e
+    autocmd FileType haskell,erlang,python,css,html,dart,javascript,sql autocmd BufWritePre <buffer> :%s/\s\+$//e
 " }}}
 
 " Haskell {{{
@@ -373,6 +379,10 @@
 
 " }}}
 
+" Erlang {{{
+autocmd FileType erlang setlocal iskeyword+=:
+" }}}
+
 " Python {{{
     autocmd! FileType python setlocal nosmartindent
 " }}}
@@ -393,6 +403,7 @@
 " Statusline {{{
     set laststatus=2
 
+    set statusline+=%r
     " Modified flag
     set statusline+=%#identifier#
     set statusline+=%m
@@ -434,8 +445,8 @@
     set statusline+=%{StatuslineTagbar()}
     set statusline+=%{fugitive#statusline()}
 
-    set statusline+=\ %c     " Cursor column
-    set statusline+=\ %l/%L  " Cursor line/total lines
+    set statusline+=\ C%c     " Cursor column
+    set statusline+=\ L%l/%L  " Cursor line/total lines
 
     set statusline+=\ %{StatuslineWindowDim()}
 
@@ -525,6 +536,10 @@
             echoerr v:errmsg
         endif
     endfunction
+" }}}
+
+" Work {{{
+cnoreabbrev <expr> csw getcmdtype()==':' && getcmdline()=='csw' ? '!~/bin/csw.sh ' . expand('%:p') : 'os'
 " }}}
 
 " vim:fdm=marker
