@@ -1,0 +1,5 @@
+clear lock
+keycode 9 = Delete
+keycode 66 = Escape
+keycode 119 = Caps_Lock
+add lock = Caps_Lock
