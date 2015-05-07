@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 
 REPO=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 

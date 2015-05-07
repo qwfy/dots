@@ -5,33 +5,36 @@
     set rtp+=~/.vim/bundle/Vundle.vim
     call vundle#begin()
 
-    Plugin 'gmarik/Vundle.vim.git'
-    Plugin 'Shougo/neocomplete.vim.git'
-    Plugin 'Shougo/vimproc.vim.git'
-    Plugin 'Twinside/vim-hoogle.git'
-    Plugin 'airblade/vim-rooter.git'
-    Plugin 'altercation/vim-colors-solarized.git'
-    Plugin 'dart-lang/dart-vim-plugin.git'
-    Plugin 'dkprice/vim-easygrep.git'
-    Plugin 'eagletmt/ghcmod-vim.git'
-    Plugin 'eagletmt/neco-ghc.git'
-    Plugin 'fishcakez/vim-rebar.git'
-    Plugin 'godlygeek/tabular.git'
-    Plugin 'gorkunov/smartpairs.vim.git'
-    Plugin 'kien/ctrlp.vim.git'
+    Plugin 'gmarik/Vundle.vim'
+    Plugin 'Shougo/neocomplete.vim'
+    Plugin 'Shougo/vimproc.vim'
+    Plugin 'Twinside/vim-hoogle'
+    Plugin 'airblade/vim-rooter'
+    Plugin 'altercation/vim-colors-solarized'
+    Plugin 'dart-lang/dart-vim-plugin'
+    Plugin 'dkprice/vim-easygrep'
+    Plugin 'eagletmt/ghcmod-vim'
+    Plugin 'eagletmt/neco-ghc'
+    Plugin 'fishcakez/vim-rebar'
+    Plugin 'godlygeek/tabular'
+    Plugin 'gorkunov/smartpairs.vim'
+    Plugin 'kien/ctrlp.vim'
     Plugin 'majutsushi/tagbar'
-    Plugin 'othree/xml.vim.git'
-    Plugin 'scrooloose/syntastic.git'
-    Plugin 'tmhedberg/matchit.git'
-    Plugin 'tomtom/tcomment_vim.git'
-    Plugin 'tpope/vim-fugitive.git'
-    Plugin 'tpope/vim-pathogen.git'
-    Plugin 'tpope/vim-surround.git'
-    Plugin 'vim-erlang/vim-erlang-runtime.git'
-    Plugin 'vim-erlang/vim-erlang-tags.git'
-    Plugin 'xolox/vim-easytags.git'
-    Plugin 'xolox/vim-misc.git'
-    Plugin 'xolox/vim-session.git'
+    Plugin 'othree/xml.vim'
+    Plugin 'scrooloose/syntastic'
+    Plugin 'tmhedberg/matchit'
+    Plugin 'tomtom/tcomment_vim'
+    Plugin 'tpope/vim-fugitive'
+    Plugin 'tpope/vim-pathogen'
+    Plugin 'tpope/vim-surround'
+    Plugin 'vim-erlang/vim-erlang-runtime'
+    Plugin 'vim-erlang/vim-erlang-tags'
+    Plugin 'xolox/vim-easytags'
+    Plugin 'xolox/vim-misc'
+    Plugin 'xolox/vim-session'
+    Plugin 'scrooloose/nerdtree'
+    Plugin 'mileszs/ack.vim'
+    Plugin 'thinca/vim-ref'
 
     call vundle#end()
     filetype plugin on
@@ -45,8 +48,6 @@
     " GUI stuff
     set shortmess+=I
     if has('gui_running')
-        set vb=
-        set t_vb=
         set background=light
         set guioptions-=m
         set guioptions-=T
@@ -55,11 +56,14 @@
         set guicursor+=a:blinkon0 " do not blink cursor
         set guifont=Input\ Mono\ 10
         colorscheme solarized
+        set lines=999
+        set columns=999
     else
         set background=dark
     endif
 
     let mapleader=","
+    syntax on
 
     " File related
     set fileformat=unix
@@ -67,10 +71,10 @@
     set fileencoding=utf-8
     set fileencodings=utf-8,gbk
     set encoding=utf-8
-    set nobackup
-    set noswapfile
-    set noundofile
     set autoread
+    set backupdir=/tmp//,.
+    set directory=/tmp//,.
+    set undodir=/tmp//,.
 
     set number
     set incsearch
@@ -103,6 +107,10 @@
     " When 'wrap' is on, use '» ' in the next line to indicate a wrap
     exec "set showbreak=\u00BB"
     set showbreak=\ 
+
+    " set tags=tags;/,codex.tags;/
+    " set tags=./tags,tags;
+    set tags=tags,~/codes/otp_src_17.4/tags
 " }}}
 
 " Folding {{{
@@ -145,8 +153,9 @@
     nnoremap : ;
     vnoremap : ;
 
-    nnoremap H ^
-    nnoremap L $
+    nnoremap <A-,> ^
+    nnoremap <A-.> $
+    nnoremap Y y$
 
     " Toggle command line window
     noremap <A-;> q:
@@ -168,22 +177,17 @@
     noremap <F9>  <ESC>:set wrap!<CR>
     noremap <F12>  <ESC>:w<CR>:!start cmd /c python "%" & pause<CR>
     noremap <C-F12> :!python<CR>
-    noremap <F11> :silent !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'<CR>
 
     " Movement
-    " noremap <silent> <A-k> :wincmd k<CR>
-    " noremap <silent> <A-j> :wincmd j<CR>
-    " noremap <silent> <A-h> :wincmd h<CR>
-    " noremap <silent> <A-l> :wincmd l<CR>
-    noremap <silent> <S-k> :wincmd k<CR>
-    noremap <silent> <S-j> :wincmd j<CR>
-    noremap <silent> <S-h> :wincmd h<CR>
-    noremap <silent> <S-l> :wincmd l<CR>
+    noremap <silent> <C-k> :wincmd k<CR>
+    noremap <silent> <C-j> :wincmd j<CR>
+    noremap <silent> <C-h> :wincmd h<CR>
+    noremap <silent> <C-l> :wincmd l<CR>
     noremap <C-j> <ESC>:bn<CR>
     noremap <C-k> <ESC>:bp<CR>
-    noremap <C-l> <ESC>:tabnext<CR>
-    noremap <C-h> <ESC>:tabprev<CR>
-    noremap <C-t> <ESC>:tabedit<CR>
+    noremap <A-l> <ESC>:tabnext<CR>
+    noremap <A-h> <ESC>:tabprev<CR>
+    nnoremap <C-t> <ESC>:tabedit<CR>
     nnoremap <SPACE> <PageDown>
     vnoremap <SPACE> <PageDown>
     nnoremap <S-SPACE> <PageUp>
@@ -192,6 +196,8 @@
     vnoremap j gj
     nnoremap k gk
     vnoremap k gk
+
+    nnoremap <C-n> *
 
     " Resize window
     noremap <C-LEFT> <ESC>:vertical resize -1<CR>
@@ -207,7 +213,7 @@
     noremap <leader>s? z=
 
     " Misc
-    noremap <C-d> <ESC>:bd!<CR>
+    noremap <A-d> <ESC>:bd!<CR>
     map <DEL> ~
 " }}}
 
@@ -223,7 +229,7 @@
     "
     " e: <cr> to jump to window in current tab if exist, otherwise open new
     " T: <c-t> jump to window anyware if exist, otherwise open new
-    let g:ctrlp_switch_buffer = 'eT'
+    let g:ctrlp_switch_buffer = 'h'
 
     let g:ctrlp_clear_cache_on_exit=0
     let g:ctrlp_working_path_mode='a'
@@ -236,6 +242,10 @@
         \ 'link' : '\vpackages$'
         \ }
     noremap <Leader>m <Esc>:CtrlPMRU<CR>
+" }}}
+
+" NerdTree {{{
+    noremap <A-n> :NERDTreeToggle<CR>
 " }}}
 
 " NeoComplete {{{
@@ -289,7 +299,6 @@
 " }}}
 
 " Easytags {{{
-    set tags=tags;/,codex.tags;/
     let g:easytags_auto_highlight=0
     let g:easytags_auto_update = 0
     let g:easytags_autorecurse = 1
@@ -304,6 +313,10 @@
     \   , 'recurse_flag': ''
     \   }
     \ }
+" }}}
+
+" Ag {{{
+let g:ackprg = 'ag --nogroup --nocolor --column --ignore=tags'
 " }}}
 
 " EasyGrep {{{
@@ -328,7 +341,7 @@
 "}}}
 
 " For These File Types {{{
-    autocmd FileType haskell,erlang,python,css,html,dart,javascript,sql autocmd BufWritePre <buffer> :%s/\s\+$//e
+    autocmd FileType haskell,python,css,html,dart,javascript,sql autocmd BufWritePre <buffer> :%s/\s\+$//e
 " }}}
 
 " Haskell {{{
@@ -538,8 +551,22 @@ autocmd FileType erlang setlocal iskeyword+=:
     endfunction
 " }}}
 
+" Google it {{{
+function! s:goog()
+  let url = 'https://www.google.com/search?q='
+  " Excerpt from vim-unimpared
+  let q = substitute(
+        \ ''.@0.'',
+        \ '[^A-Za-z0-9_.~-]',
+        \ '\="%".printf("%02X", char2nr(submatch(0)))',
+        \ 'g')
+  call system('xdg-open ' . url . q)
+endfunction
+xnoremap <leader>? y:call <SID>goog()<CR>
+" }}}
+
 " Work {{{
-cnoreabbrev <expr> csw getcmdtype()==':' && getcmdline()=='csw' ? '!~/bin/csw.sh ' . expand('%:p') : 'os'
+cnoreabbrev <expr> csw getcmdtype()==':' && getcmdline()=='csw' ? '!' . "erlc -pa /home/incomplete/codes/SuperWingsServer/deps/lager/ebin +'{parse_transform, lager_transform}' +'{lager_print_records_flag, false}'  -pa /home/incomplete/codes/SuperWingsServer/deps/dynarec/ebin +debug_info +bin_opt_info -I/home/incomplete/codes/SuperWingsServer/include -I/home/incomplete/codes/SuperWingsServer/deps/ -o/home/incomplete/codes/SuperWingsServer/ebin  -Wall " . expand('%:p') : 'csw'
 " }}}
 
 " vim:fdm=marker
