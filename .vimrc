@@ -56,8 +56,6 @@
         set guicursor+=a:blinkon0 " do not blink cursor
         set guifont=Input\ Mono\ 10
         colorscheme solarized
-        set lines=999
-        set columns=999
     else
         set background=dark
     endif
@@ -110,7 +108,7 @@
 
     " set tags=tags;/,codex.tags;/
     " set tags=./tags,tags;
-    set tags=tags,~/codes/otp_src_17.4/tags
+    set tags=tags,~/codes/otp_src_17.5/tags
 " }}}
 
 " Folding {{{
@@ -157,6 +155,9 @@
     nnoremap <A-.> $
     nnoremap Y y$
 
+    vnoremap <C-Insert> "+y
+    nnoremap <S-Insert> "+p
+
     " Toggle command line window
     noremap <A-;> q:
     autocmd CmdwinEnter * noremap <buffer> <ESC> <ESC>:q<CR>
@@ -183,8 +184,8 @@
     noremap <silent> <C-j> :wincmd j<CR>
     noremap <silent> <C-h> :wincmd h<CR>
     noremap <silent> <C-l> :wincmd l<CR>
-    noremap <C-j> <ESC>:bn<CR>
-    noremap <C-k> <ESC>:bp<CR>
+    noremap <A-j> <ESC>:bn<CR>
+    noremap <A-k> <ESC>:bp<CR>
     noremap <A-l> <ESC>:tabnext<CR>
     noremap <A-h> <ESC>:tabprev<CR>
     nnoremap <C-t> <ESC>:tabedit<CR>
