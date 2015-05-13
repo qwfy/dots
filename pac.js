@@ -2,9 +2,10 @@ function FindProxyForURL(url, host) {
   var victims = new Array
   ( "acm.org"
   , "archbang.org"
-  , "erlang.org"
+  // , "erlang.org"
   , "goldenfrog.com"
   , "strongvpn.com"
+  , "android.com"
   , "w3schools.com"
   , "tldp.org"
   , "jeasyui.com"

@@ -35,6 +35,7 @@
     Plugin 'scrooloose/nerdtree'
     Plugin 'mileszs/ack.vim'
     Plugin 'thinca/vim-ref'
+    Plugin 'henrik/vim-indexed-search'
 
     call vundle#end()
     filetype plugin on
