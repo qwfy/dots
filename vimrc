@@ -7,7 +7,10 @@
 
     Plugin 'gmarik/Vundle.vim'
     Plugin 'Shougo/neocomplete.vim'
+    Plugin 'Shougo/neosnippet'
+    Plugin 'Shougo/neosnippet-snippets'
     Plugin 'Shougo/vimproc.vim'
+    " Plugin 'Shougo/vimfiler.vim'
     Plugin 'Twinside/vim-hoogle'
     Plugin 'airblade/vim-rooter'
     Plugin 'altercation/vim-colors-solarized'
@@ -36,6 +39,8 @@
     Plugin 'mileszs/ack.vim'
     Plugin 'thinca/vim-ref'
     Plugin 'henrik/vim-indexed-search'
+    Plugin 'vim-scripts/drawit'
+    Plugin 'fmoralesc/vim-pad'
 
     call vundle#end()
     filetype plugin on
@@ -43,6 +48,7 @@
 " }}}
 
 " VIM Options {{{
+    let $PATH.=':'.expand('~/bin')
     scriptencoding utf-8
     set nocompatible
 
@@ -71,9 +77,10 @@
     set fileencodings=utf-8,gbk
     set encoding=utf-8
     set autoread
+    set noswapfile
     set backupdir=/tmp//,.
-    set directory=/tmp//,.
-    set undodir=/tmp//,.
+    " set directory=/tmp//,.
+    " set undodir=/tmp//,.
 
     set number
     set incsearch
@@ -107,9 +114,9 @@
     exec "set showbreak=\u00BB"
     set showbreak=\ 
 
-    " set tags=tags;/,codex.tags;/
+    set tags=tags;/,codex.tags;/~/codes/otp_src_17.5/tags;/
     " set tags=./tags,tags;
-    set tags=tags,~/codes/otp_src_17.5/tags
+    " set tags=tags,~/codes/otp_src_17.5/tags
 " }}}
 
 " Folding {{{
@@ -172,11 +179,11 @@
     cnoremap <C-H> <Left>
     cnoremap <C-L> <Right>
 
-    noremap <F3>  <ESC>:noh<CR>:echom 'Cancelled highlight'<CR>
+    noremap <F3>  <ESC>:noh<CR>:echom 'Cancelled highlight'<CR>:redraw!<CR>
     noremap <F4>  :s/^\(.\{-}\)\s*$/\1/g<CR><ESC>:noh<CR>:echom 'Trailing whitespaces removed'<CR>
     noremap <F5>  :s/^\s*\(.\{-}\)\s*$/\1/g<CR><ESC>:noh<CR>:echom 'Leading and trailing whitespaces removed'<CR>
     noremap <F8>  :TagbarToggle<CR>
-    noremap <F9>  <ESC>:set wrap!<CR>
+    noremap <F9>  <ESC>:setlocal wrap!<CR>
     noremap <F12>  <ESC>:w<CR>:!start cmd /c python "%" & pause<CR>
     noremap <C-F12> :!python<CR>
 
@@ -208,11 +215,7 @@
     noremap <C-DOWN> <ESC>:res -1<CR>
 
     " Spell checking
-    noremap <leader>ss :setlocal spell!<CR>
-    noremap <leader>sn ]s
-    noremap <leader>sp [s
-    noremap <leader>sa zg
-    noremap <leader>s? z=
+    noremap <leader>sp :setlocal spell!<CR>
 
     " Misc
     noremap <A-d> <ESC>:bd!<CR>
@@ -250,6 +253,11 @@
     noremap <A-n> :NERDTreeToggle<CR>
 " }}}
 
+" VimFiler {{{
+    " let g:vimfiler_as_default_explorer = 1
+    " nnoremap <A-n> :VimFiler -toggle -buffer-name=explorer -split -simple
+" }}}
+
 " NeoComplete {{{
     let g:neocomplete#enable_at_startup=1
     let g:neocomplete#enable_smart_case=1
@@ -264,7 +272,19 @@
     autocmd FileType xml           setlocal omnifunc=xmlcomplete#CompleteTags
 " }}}
 
+" NeoSnippet {{{
+    let g:neosnippet#snippets_directory = expand('~/.vim/snippets/')
+    " SuperTab like snippets' behavior.
+    imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+        \ "\<Plug>(neosnippet_expand_or_jump)"
+        \ : pumvisible() ? "\<C-n>" : "\<TAB>"
+    "smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+    " \ "\<Plug>(neosnippet_expand_or_jump)"
+    " \: "\<TAB>"
+" }}}
+
 " Syntastic {{{
+    " let g:syntastic_shell='/bin/bash'
     let g:syntastic_always_populate_loc_list = 1
 
     let g:syntastic_python_checkers=['pylint']
@@ -286,6 +306,8 @@
     \          regex-selectors,
     \          compatible-vendor-prefixes
     \ '
+
+    let g:syntastic_sh_checkers=['shellcheck']
 
     let g:syntastic_mode_map =
     \ { "mode": "active"
@@ -319,6 +341,7 @@
 
 " Ag {{{
 let g:ackprg = 'ag --nogroup --nocolor --column --ignore=tags'
+cnoreabbrev <expr> ag getcmdtype()==':' && getcmdline()=='ag' ? 'Ack' : 'ag'
 " }}}
 
 " EasyGrep {{{
@@ -341,6 +364,10 @@ let g:ackprg = 'ag --nogroup --nocolor --column --ignore=tags'
     cnoreabbrev <expr> os getcmdtype()==':' && getcmdline()=='os' ? 'OpenSession!' : 'os'
     cnoreabbrev <expr> ss getcmdtype()==':' && getcmdline()=='ss' ? 'SaveSession'  : 'ss'
 "}}}
+
+" VimPad {{{
+    let g:pad#dir = "~/Notes"
+" }}}
 
 " For These File Types {{{
     autocmd FileType haskell,python,css,html,dart,javascript,sql autocmd BufWritePre <buffer> :%s/\s\+$//e
