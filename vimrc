@@ -79,8 +79,6 @@
     set autoread
     set noswapfile
     set backupdir=/tmp//,.
-    " set directory=/tmp//,.
-    " set undodir=/tmp//,.
 
     set number
     set incsearch
@@ -105,18 +103,19 @@
     set autoindent
 
     " Long lines
+    set breakindent
+    " Indent the wrapped line
+
     set nowrap
     " When 'wrap' is off, use '»' as the last column to indicate a wrap
     set listchars=extends:»
-    " Indent the wrapped line
-    " set breakindent
-    " When 'wrap' is on, use '» ' in the next line to indicate a wrap
-    exec "set showbreak=\u00BB"
-    set showbreak=\ 
+
+    " When 'wrap' is on, use '↳ ' in the next line to indicate a wrap
+    highlight! link NonText Character
+    exec "set showbreak=↳"
+    set showbreak+=\ 
 
     set tags=tags;/,codex.tags;/~/codes/otp_src_17.5/tags;/
-    " set tags=./tags,tags;
-    " set tags=tags,~/codes/otp_src_17.5/tags
 " }}}
 
 " Folding {{{

@@ -85,6 +85,16 @@ options head
     %% Supervisor callback
     -export([init/1]).
 
+    -spec init(Args :: term())
+          -> {ok, { { RestartStrategy :: one_for_one | one_for_all | rest_for_one | simple_one_for_one
+                    , MaxR
+                    , MaxT
+                    }
+                  , [ChildSpec]
+                  }}
+          | ignore.
+
+
     init([${1}]) ->
         {ok, {{RestartStrategy, MaxR, MaxT},
               [ChildId,
