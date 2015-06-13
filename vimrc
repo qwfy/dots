@@ -54,15 +54,18 @@
     set nocompatible
 
     " GUI stuff
-    set shortmess+=I
-    set background=light
-    set guioptions-=m
-    set guioptions-=T
-    set guioptions-=t
-    set guioptions+=b
-    set guicursor+=a:blinkon0 " do not blink cursor
-    set guifont=Input\ Mono\ 10
-    colorscheme solarized
+    if has('gui_running')
+        set background=light
+        set guioptions-=m
+        set guioptions-=T
+        set guioptions-=t
+        set guioptions+=b
+        set guicursor+=a:blinkon0 " do not blink cursor
+        set guifont=Input\ Mono\ 10
+        colorscheme solarized
+    else
+        set background=dark
+    endif
 
     let mapleader=","
     syntax on
