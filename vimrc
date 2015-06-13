@@ -10,7 +10,6 @@
     Plugin 'Shougo/neosnippet'
     Plugin 'Shougo/neosnippet-snippets'
     Plugin 'Shougo/vimproc.vim'
-    " Plugin 'Shougo/vimfiler.vim'
     Plugin 'Twinside/vim-hoogle'
     Plugin 'airblade/vim-rooter'
     Plugin 'altercation/vim-colors-solarized'
@@ -49,23 +48,21 @@
 
 " VIM Options {{{
     let $PATH.=':'.expand('~/bin')
+    let $PATH.=':'.expand('~/codes/ghc-mod/dist/7.10.1/build/ghc-mod/')
+    let $PATH.=':'.expand('~/codes/ghc-mod/dist/7.10.1/build/ghc-modi/')
     scriptencoding utf-8
     set nocompatible
 
     " GUI stuff
     set shortmess+=I
-    if has('gui_running')
-        set background=light
-        set guioptions-=m
-        set guioptions-=T
-        set guioptions-=t
-        set guioptions+=b
-        set guicursor+=a:blinkon0 " do not blink cursor
-        set guifont=Input\ Mono\ 10
-        colorscheme solarized
-    else
-        set background=dark
-    endif
+    set background=light
+    set guioptions-=m
+    set guioptions-=T
+    set guioptions-=t
+    set guioptions+=b
+    set guicursor+=a:blinkon0 " do not blink cursor
+    set guifont=Input\ Mono\ 10
+    colorscheme solarized
 
     let mapleader=","
     syntax on
@@ -252,11 +249,6 @@
     noremap <A-n> :NERDTreeToggle<CR>
 " }}}
 
-" VimFiler {{{
-    " let g:vimfiler_as_default_explorer = 1
-    " nnoremap <A-n> :VimFiler -toggle -buffer-name=explorer -split -simple
-" }}}
-
 " NeoComplete {{{
     let g:neocomplete#enable_at_startup=1
     let g:neocomplete#enable_smart_case=1
@@ -283,7 +275,6 @@
 " }}}
 
 " Syntastic {{{
-    " let g:syntastic_shell='/bin/bash'
     let g:syntastic_always_populate_loc_list = 1
 
     let g:syntastic_python_checkers=['pylint']
@@ -310,7 +301,7 @@
 
     let g:syntastic_mode_map =
     \ { "mode": "active"
-    \ , "passive_filetypes": ["dart", "haskell"]
+    \ , "passive_filetypes": ["dart"]
     \ }
 
     noremap <leader>sc <ESC>:SyntasticCheck<CR>
@@ -379,10 +370,10 @@ cnoreabbrev <expr> ag getcmdtype()==':' && getcmdline()=='ag' ? 'Ack' : 'ag'
     " Hoogle
     let g:hoogle_search_count = 15
     let g:hoogle_search_buffer_size = 15
-    nnoremap <Leader>hh :Hoogle
-    nnoremap <Leader>hH :Hoogle<CR>
-    nnoremap <Leader>hi :HoogleInfo
-    nnoremap <Leader>hI :HoogleInfo<CR>
+    cnoreabbrev <expr> hoogle getcmdtype()==':' && getcmdline()=='hoogle' ? 'Hoogle' : 'hoogle'
+    cnoreabbrev <expr> hoogleinfo getcmdtype()==':' && getcmdline()=='hoogleinfo' ? 'HoogleInfo' : 'hoogleinfo'
+    nnoremap <Leader>hh :Hoogle<CR>
+    nnoremap <Leader>hi :HoogleInfo<CR>
     nnoremap <Leader>hc :HoogleClose<CR>
 
     " Tagbar
@@ -555,7 +546,6 @@ autocmd FileType erlang setlocal iskeyword+=:
       let s = tag!='' ? '[' . tag . ']' : ''
       return s
     endfunction
-
 " }}}
 
 " Rename {{{
@@ -580,21 +570,33 @@ autocmd FileType erlang setlocal iskeyword+=:
 " }}}
 
 " Google it {{{
-function! s:goog()
-  let url = 'https://www.google.com/search?q='
-  " Excerpt from vim-unimpared
-  let q = substitute(
-        \ ''.@0.'',
-        \ '[^A-Za-z0-9_.~-]',
-        \ '\="%".printf("%02X", char2nr(submatch(0)))',
-        \ 'g')
-  call system('xdg-open ' . url . q)
-endfunction
-xnoremap <leader>? y:call <SID>goog()<CR>
+    function! s:google()
+      let url = 'https://www.google.com/search?q='
+      let q = substitute(
+            \ ''.@0.'',
+            \ '[^A-Za-z0-9_.~-]',
+            \ '\="%".printf("%02X", char2nr(submatch(0)))',
+            \ 'g')
+      call system('xdg-open ' . url . q)
+    endfunction
+    xnoremap <leader>? y:call <SID>google()<CR>
 " }}}
 
 " Work {{{
-cnoreabbrev <expr> csw getcmdtype()==':' && getcmdline()=='csw' ? '!' . "erlc -pa /home/incomplete/codes/SuperWingsServer/deps/lager/ebin +'{parse_transform, lager_transform}' +'{lager_print_records_flag, false}'  -pa /home/incomplete/codes/SuperWingsServer/deps/dynarec/ebin +debug_info +bin_opt_info -I/home/incomplete/codes/SuperWingsServer/include -I/home/incomplete/codes/SuperWingsServer/deps/ -o/home/incomplete/codes/SuperWingsServer/ebin  -Wall " . expand('%:p') : 'csw'
+    function! GenSuperWingsErlc()
+        return "!erlc "
+           \ . "-pa ~/codes/SuperWingsServer/deps/lager/ebin "
+           \ . "-pa ~/codes/SuperWingsServer/deps/dynarec/ebin "
+           \ . "-I ~/codes/SuperWingsServer/include "
+           \ . "-I ~/codes/SuperWingsServer/deps/ "
+           \ . "-o ~/codes/SuperWingsServer/ebin "
+           \ . "-Wall "
+           \ . "+'{parse_transform, lager_transform}' +'{lager_print_records_flag, false}' "
+           \ . "+debug_info "
+           \ . "+bin_opt_info "
+           \ . expand('%:p')
+    endfunction
+    cnoreabbrev <expr> csw getcmdtype()==':' && getcmdline()=='csw' ? GenSuperWingsErlc() : 'csw'
 " }}}
 
 " vim:fdm=marker

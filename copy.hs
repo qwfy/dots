@@ -6,11 +6,13 @@ import System.Directory
 import Control.Monad (liftM)
 
 repoPath = "~/codes/dots"
--- path: (osLocation, repoLocation)
+-- path:  (osLocation                    , repoLocation)
 files = [ ("~/.vimrc"                    , "$repoPath/vimrc")
         , ("~/.xinitrc"                  , "$repoPath/xinitrc")
         , ("~/.xmodmap"                  , "$repoPath/xmodmap")
+        , ("~/.wgetrc"                   , "$repoPath/wgetrc")
         , ("~/bin/pac.js"                , "$repoPath/pac.js")
+        , ("~/bin/bashrc"                , "$repoPath/bashrc")
         , ("~/.vim/snippets/erlang.snip" , "$repoPath/erlang.snip")
         ]
 
