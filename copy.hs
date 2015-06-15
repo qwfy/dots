@@ -27,27 +27,18 @@ expandPath p =
           expandOne ('$' : var) = getEnv var
           expandOne x = return x
 
-data Direction = Os2Repo | Repo2Os
-
-instance (Show Direction) where
-    show Os2Repo = "->"
-    show Repo2Os = "<-"
-
-copyTuple :: Direction -> (FilePath, FilePath) -> IO ()
-copyTuple d@Os2Repo (x, y) = do
+makeCopy :: FilePath -> FilePath -> IO ()
+makeCopy x y = do
     x' <- expandPath x
     y' <- expandPath y
-    putStrLn . concat $ [x', surround . show $ d, y']
+    createDirectoryIfMissing True $ takeDirectory y'
+    putStrLn . concat $ [x', " -> " , y']
     copyFile x' y'
-copyTuple Repo2Os (x, y) = copyTuple Os2Repo (y, x)
-
-surround :: String -> String
-surround x = concat ["\t", x, " "]
 
 main :: IO ()
 main = do
     [direction] <- getArgs
-    let direction' = case direction of
-                         "os2repo" -> Os2Repo
-                         "repo2os" -> Repo2Os
-    mapM_ (copyTuple direction') files
+    let modifier = case direction of
+                       "os2repo" -> id
+                       "repo2os" -> flip
+    mapM_ (uncurry $ modifier makeCopy) files
