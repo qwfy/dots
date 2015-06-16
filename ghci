@@ -1,1 +1,3 @@
 :set prompt "\ESC[34mλ \ESC[m"
+:def hh \x -> return $ ":!hoogle \"" ++ x ++ "\""
+:def ii \x -> return $ ":!hoogle --info \"" ++ x ++ "\""
