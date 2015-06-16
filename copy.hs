@@ -15,6 +15,7 @@ files = [ ("~/.vimrc"                    , "$repoPath/vimrc")
         , ("~/bin/pac.js"                , "$repoPath/pac.js")
         , ("~/bin/bashrc"                , "$repoPath/bashrc")
         , ("~/.vim/snippets/erlang.snip" , "$repoPath/erlang.snip")
+        , ("~/.local/share/konsole/Shell.profile" , "$repoPath/Shell.profile")
         ]
 
 expandPath :: FilePath -> IO FilePath
