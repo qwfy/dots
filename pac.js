@@ -22,6 +22,7 @@ function FindProxyForURL(url, host) {
   , "awsstatic.com"
   , "berkeley.edu"
   , "blogspot.com"
+  , "blogspot.co"
   , "blogger.com"
   , "blogblog.com"
   , "bulkrenameutility.co.uk"

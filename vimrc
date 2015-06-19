@@ -106,7 +106,7 @@
     set breakindent
     " Indent the wrapped line
 
-    set wrap
+    set nowrap
     " When 'wrap' is off, use '»' as the last column to indicate a wrap
     set listchars=extends:»
 
