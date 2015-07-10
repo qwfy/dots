@@ -40,6 +40,7 @@
     Plugin 'henrik/vim-indexed-search'
     Plugin 'vim-scripts/drawit'
     Plugin 'fmoralesc/vim-pad'
+    Plugin 'lambdatoast/elm.vim'
 
     call vundle#end()
     filetype plugin on
@@ -334,7 +335,7 @@
 
 " Ag {{{
 let g:ackprg = 'ag --nogroup --nocolor --column --ignore=tags'
-cnoreabbrev <expr> ag getcmdtype()==':' && getcmdline()=='ag' ? 'Ack' : 'ag'
+cnoreabbrev <expr> ack getcmdtype()==':' && getcmdline()=='ack' ? 'Ack' : 'ack'
 " }}}
 
 " EasyGrep {{{
@@ -345,6 +346,7 @@ cnoreabbrev <expr> ag getcmdtype()==':' && getcmdline()=='ag' ? 'Ack' : 'ag'
 " tComment {{{
     nmap <Leader>cc gcc
     vmap <Leader>cc gc
+    au BufNewFile,BufRead *.proto setlocal commentstring=//%s
 " }}}
 
 " Session {{{
