@@ -41,6 +41,9 @@
     Plugin 'vim-scripts/drawit'
     Plugin 'fmoralesc/vim-pad'
     Plugin 'lambdatoast/elm.vim'
+    Plugin 'vim-pandoc/vim-pandoc-syntax'
+    Plugin 'vim-pandoc/vim-pandoc'
+    Plugin 'tpope/vim-markdown'
 
     call vundle#end()
     filetype plugin on
@@ -116,7 +119,7 @@
     exec "set showbreak=↳"
     set showbreak+=\ 
 
-    set tags=tags,codex.tags,~/codes/otp_src_17.5/tags
+    set tags=tags,codex.tags,~/codes/otp_src_18.0/tags
 " }}}
 
 " Folding {{{
@@ -144,11 +147,20 @@
     iabbrev fixme FIXME
 
     inoremap ;; ::
-    inoremap -- ->
+    inoremap .. ->
+    inoremap << <-
+    inoremap -> ..
+
+    " For markdown headers
+    inoremap <A-1> <ESC>VypVr=k$jo<ESC>o
+    inoremap <A-2> <ESC>VypVr-k$jo<ESC>o
+    nnoremap <A-1> <ESC>VypVr=k$jo<ESC>
+    nnoremap <A-2> <ESC>VypVr-k$jo<ESC>
 
     " Pair
     inoremap '' ''<ESC>i
     inoremap "" ""<ESC>i
+    inoremap `` ``<ESC>i
     inoremap <> <><ESC>i
     inoremap () ()<ESC>i
     inoremap [] []<ESC>i
@@ -362,10 +374,11 @@ cnoreabbrev <expr> ack getcmdtype()==':' && getcmdline()=='ack' ? 'Ack' : 'ack'
 
 " VimPad {{{
     let g:pad#dir = "~/Notes"
+    let g:pad#open_in_split = 0
 " }}}
 
 " For These File Types {{{
-    autocmd FileType haskell,python,css,html,dart,javascript,sql autocmd BufWritePre <buffer> :%s/\s\+$//e
+    autocmd FileType haskell,python,css,html,dart,javascript,sql,markdown autocmd BufWritePre <buffer> :%s/\s\+$//e
 " }}}
 
 " Haskell {{{
@@ -602,6 +615,10 @@ autocmd FileType erlang setlocal iskeyword+=:
            \ . expand('%:p')
     endfunction
     cnoreabbrev <expr> csw getcmdtype()==':' && getcmdline()=='csw' ? GenSuperWingsErlc() : 'csw'
+" }}}
+
+" Markdown {{{
+    autocmd FileType markdown setlocal nobreakindent wrap showbreak=
 " }}}
 
 " vim:fdm=marker
