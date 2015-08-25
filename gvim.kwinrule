@@ -1,0 +1,11 @@
+[Application settings for gvim]
+Description=Application settings for gvim
+clientmachine=godel
+clientmachinematch=0
+position=0,0
+positionrule=2
+size=1920,1055
+sizerule=2
+wmclass=gvim
+wmclasscomplete=false
+wmclassmatch=1

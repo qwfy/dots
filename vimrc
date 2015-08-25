@@ -17,33 +17,34 @@
     Plugin 'dkprice/vim-easygrep'
     Plugin 'eagletmt/ghcmod-vim'
     Plugin 'eagletmt/neco-ghc'
+    Plugin 'elmcast/elm-vim'
     Plugin 'fishcakez/vim-rebar'
+    Plugin 'fmoralesc/vim-pad'
     Plugin 'godlygeek/tabular'
     Plugin 'gorkunov/smartpairs.vim'
+    Plugin 'henrik/vim-indexed-search'
     Plugin 'kien/ctrlp.vim'
     Plugin 'majutsushi/tagbar'
+    Plugin 'mileszs/ack.vim'
     Plugin 'othree/xml.vim'
+    Plugin 'rhysd/clever-f.vim'
+    Plugin 'scrooloose/nerdtree'
     Plugin 'scrooloose/syntastic'
+    Plugin 'thinca/vim-ref'
     Plugin 'tmhedberg/matchit'
     Plugin 'tomtom/tcomment_vim'
     Plugin 'tpope/vim-fugitive'
-    Plugin 'tpope/vim-pathogen'
+    Plugin 'tpope/vim-markdown'
     Plugin 'tpope/vim-surround'
     Plugin 'vim-erlang/vim-erlang-runtime'
     Plugin 'vim-erlang/vim-erlang-tags'
+    Plugin 'vim-pandoc/vim-pandoc'
+    Plugin 'vim-pandoc/vim-pandoc-after'
+    Plugin 'vim-pandoc/vim-pandoc-syntax'
+    Plugin 'vim-scripts/drawit'
     Plugin 'xolox/vim-easytags'
     Plugin 'xolox/vim-misc'
     Plugin 'xolox/vim-session'
-    Plugin 'scrooloose/nerdtree'
-    Plugin 'mileszs/ack.vim'
-    Plugin 'thinca/vim-ref'
-    Plugin 'henrik/vim-indexed-search'
-    Plugin 'vim-scripts/drawit'
-    Plugin 'fmoralesc/vim-pad'
-    Plugin 'lambdatoast/elm.vim'
-    Plugin 'vim-pandoc/vim-pandoc-syntax'
-    Plugin 'vim-pandoc/vim-pandoc'
-    Plugin 'tpope/vim-markdown'
 
     call vundle#end()
     filetype plugin on
@@ -153,7 +154,7 @@
 
     " For markdown headers
     inoremap <A-1> <ESC>VypVr=k$jo<ESC>o
-    inoremap <A-2> <ESC>VypVr-k$jo<ESC>o
+    inoremap <A-2> <ESC>VypVr-k$jo
     nnoremap <A-1> <ESC>VypVr=k$jo<ESC>
     nnoremap <A-2> <ESC>VypVr-k$jo<ESC>
 
@@ -441,13 +442,14 @@ autocmd FileType erlang setlocal iskeyword+=:
     " Treat .mythcss as CSS file, and auto compile it
     autocmd BufNewFile,BufRead,BufReadPost *.mythcss setfiletype css
     autocmd BufWritePost *.mythcss silent execute '!myth --compress'.' '.shellescape(expand('%:p')).' '.shellescape(expand('%:r').'.css')
+    autocmd BufNewFile,BufRead,BufReadPost *.djhtml setfiletype htmldjango
 
     " Html funky comment to remove spaces between inline-blocks
     vmap <leader>hf :s/^\(\s*\)</\1+--></g<CR>gv:s/>$/><!--+/g<CR><ESC>:noh<CR>
     vmap <Leader>huf :s/\(+-->\\|<!--+\)//g<CR>:noh<CR>
 
     " Use two spaces as indent for these file types
-    autocmd FileType html,css,dart set tabstop=2 softtabstop=2 shiftwidth=2
+    autocmd FileType html,css,dart setlocal tabstop=2 softtabstop=2 shiftwidth=2
 " }}}
 
 " Statusline {{{
