@@ -27,7 +27,6 @@
     Plugin 'majutsushi/tagbar'
     Plugin 'mileszs/ack.vim'
     Plugin 'othree/xml.vim'
-    Plugin 'rhysd/clever-f.vim'
     Plugin 'scrooloose/nerdtree'
     Plugin 'scrooloose/syntastic'
     Plugin 'thinca/vim-ref'
@@ -36,7 +35,7 @@
     Plugin 'tpope/vim-fugitive'
     Plugin 'tpope/vim-markdown'
     Plugin 'tpope/vim-surround'
-    Plugin 'vim-erlang/vim-erlang-runtime'
+    " Plugin 'vim-erlang/vim-erlang-runtime'
     Plugin 'vim-erlang/vim-erlang-tags'
     Plugin 'vim-pandoc/vim-pandoc'
     Plugin 'vim-pandoc/vim-pandoc-after'
@@ -92,6 +91,7 @@
     set history=1000
     set laststatus=2
     set showcmd
+    set wildignorecase
 
     set conceallevel=2
     set concealcursor=nc
@@ -120,7 +120,7 @@
     exec "set showbreak=↳"
     set showbreak+=\ 
 
-    set tags=tags,codex.tags,~/codes/otp_src_18.0/tags
+    set tags=tags,codex.tags,~/codes/otp_src_18.1/tags
 " }}}
 
 " Folding {{{
@@ -195,6 +195,7 @@
     noremap <F3>  <ESC>:noh<CR>:echom 'Cancelled highlight'<CR>:redraw!<CR>
     noremap <F4>  :s/^\(.\{-}\)\s*$/\1/g<CR><ESC>:noh<CR>:echom 'Trailing whitespaces removed'<CR>
     noremap <F5>  :s/^\s*\(.\{-}\)\s*$/\1/g<CR><ESC>:noh<CR>:echom 'Leading and trailing whitespaces removed'<CR>
+    noremap <F7>  <ESC><C-w>r<C-w>l<C-w>=
     noremap <F8>  :TagbarToggle<CR>
     noremap <F9>  <ESC>:setlocal wrap!<CR>
     noremap <F12>  <ESC>:w<CR>:!start cmd /c python "%" & pause<CR>
@@ -255,7 +256,7 @@
     let g:ctrlp_regexp=1
     let g:ctrlp_show_hidden=0
     let g:ctrlp_custom_ignore={
-        \ 'dir'  : '\v(\.git|\.hg|\.svn|packages|build|Mnesia\.node.*)$',
+        \ 'dir'  : '\v(\.git|\.hg|\.svn|packages|build|Mnesia\.node.*|data.run/ct|data.run/dets|data.run/mnesia|data.run/sw_backup)$',
         \ 'file' : '\v(\.hi|\.o|\.jpg|\.jpeg|\.bmp\.png\.exe|\.so|\.dll|\.beam|\.pyc|\~)$',
         \ 'link' : '\vpackages$'
         \ }
@@ -347,7 +348,7 @@
 " }}}
 
 " Ag {{{
-let g:ackprg = 'ag --nogroup --nocolor --column --ignore=tags'
+let g:ackprg = 'ag --nogroup --nocolor --column --ignore=tags --skip-vcs-ignores'
 cnoreabbrev <expr> ack getcmdtype()==':' && getcmdline()=='ack' ? 'Ack' : 'ack'
 " }}}
 
@@ -455,7 +456,6 @@ autocmd FileType erlang setlocal iskeyword+=:
 " Statusline {{{
     set laststatus=2
 
-    set statusline+=%r
     " Modified flag
     set statusline+=%#identifier#
     set statusline+=%m
@@ -604,17 +604,19 @@ autocmd FileType erlang setlocal iskeyword+=:
 
 " Work {{{
     function! GenSuperWingsErlc()
-        return "!erlc "
-           \ . "-pa ~/codes/SuperWingsServer/deps/lager/ebin "
-           \ . "-pa ~/codes/SuperWingsServer/deps/dynarec/ebin "
-           \ . "-I ~/codes/SuperWingsServer/include "
-           \ . "-I ~/codes/SuperWingsServer/deps/ "
-           \ . "-o ~/codes/SuperWingsServer/ebin "
-           \ . "-Wall "
-           \ . "+'{parse_transform, lager_transform}' +'{lager_print_records_flag, false}' "
-           \ . "+debug_info "
-           \ . "+bin_opt_info "
-           \ . expand('%:p')
+        let cwd = getcwd()
+        return "!erlc"
+           \ . " -pa" . cwd . "/deps/lager/ebin"
+           \ . " -pa" . cwd . "/deps/dynarec/ebin"
+           \ . " -I"  . cwd . "/include"
+           \ . " -I"  . cwd . "/deps"
+           \ . " -o"  . cwd . "/ebin"
+           \ . " -Wall"
+           \ . " +'{parse_transform, lager_transform}'"
+           \ . " +'{lager_print_records_flag, false}'"
+           \ . " +debug_info"
+           \ . " +bin_opt_info"
+           \ . " " . expand('%:p')
     endfunction
     cnoreabbrev <expr> csw getcmdtype()==':' && getcmdline()=='csw' ? GenSuperWingsErlc() : 'csw'
 " }}}

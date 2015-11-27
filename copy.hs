@@ -8,7 +8,7 @@ import Control.Monad (liftM)
 repoPath = "~/codes/dots"
 -- path:  (osLocation                    , repoLocation)
 files = [ ("~/.vimrc"                    , "$repoPath/vimrc")
-        , ("~/.xinitrc"                  , "$repoPath/xinitrc")
+        -- , ("~/.xinitrc"                  , "$repoPath/xinitrc")
         , ("~/.xmodmap"                  , "$repoPath/xmodmap")
         , ("~/.wgetrc"                   , "$repoPath/wgetrc")
         , ("~/.ghci"                     , "$repoPath/ghci")
