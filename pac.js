@@ -2,6 +2,7 @@ function FindProxyForURL(url, host) {
   var victims = new Array
   ( "acm.org"
   , "archbang.org"
+  , "schemasync.org"
   , "pastebin.com"
   , "lemire.me"
   , "darcs.net"
@@ -108,6 +109,7 @@ function FindProxyForURL(url, host) {
   , "vpngate.net"
   , "wikia.com"
   , "wikimedia.org"
+  , "wikipedia.org"
   , "wordpress.com"
   , "wsj.com"
   , "ycombinator.com"
