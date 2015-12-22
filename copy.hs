@@ -17,6 +17,7 @@ files = [ ("~/.vimrc"                             , "$repoPath/vimrc")
         , ("~/.vim/snippets/erlang.snip"          , "$repoPath/erlang.snip")
         , ("~/.local/share/konsole/Shell.profile" , "$repoPath/Shell.profile")
         , ("~/.config/octave/qt-settings"         , "$repoPath/octave.qt-settings")
+        , ("~/.octaverc"                          , "$repoPath/octaverc")
         ]
 
 expandPath :: FilePath -> IO FilePath
