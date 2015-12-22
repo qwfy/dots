@@ -28,6 +28,7 @@ function update-vim-plugins {
         git pull
         cd -
     done
+    cd ~/.vim/bundle/vimproc.vim/ && make
 
     cd "$orig_dir"
 }
