@@ -1,6 +1,6 @@
 [Appearance]
 ColorScheme=SolarizedLight
-Font=Input Mono,10,-1,5,50,0,0,0,0,0
+Font=Input,10,-1,5,50,0,0,0,0,0
 
 [General]
 Directory=

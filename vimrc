@@ -35,7 +35,6 @@
     Plugin 'tpope/vim-fugitive'
     Plugin 'tpope/vim-markdown'
     Plugin 'tpope/vim-surround'
-    " Plugin 'vim-erlang/vim-erlang-runtime'
     Plugin 'vim-erlang/vim-erlang-tags'
     Plugin 'vim-pandoc/vim-pandoc'
     Plugin 'vim-pandoc/vim-pandoc-after'
@@ -65,7 +64,8 @@
         set guioptions-=t
         set guioptions+=b
         set guicursor+=a:blinkon0 " do not blink cursor
-        set guifont=Input\ Mono\ 10
+        " set guifont=Input\ Mono\ 10
+        set guifont=Input\ 10
         colorscheme solarized
     else
         set background=dark
@@ -198,8 +198,8 @@
     noremap <F7>  <ESC><C-w>r<C-w>l<C-w>=
     noremap <F8>  :TagbarToggle<CR>
     noremap <F9>  <ESC>:setlocal wrap!<CR>
-    noremap <F12>  <ESC>:w<CR>:!start cmd /c python "%" & pause<CR>
-    noremap <C-F12> :!python<CR>
+    " noremap <F12>  <ESC>:w<CR>:!start cmd /c python "%" & pause<CR>
+    noremap <F12> :%!python<CR>
 
     " Movement
     noremap <silent> <C-k> :wincmd k<CR>
@@ -256,7 +256,7 @@
     let g:ctrlp_regexp=1
     let g:ctrlp_show_hidden=0
     let g:ctrlp_custom_ignore={
-        \ 'dir'  : '\v(\.git|\.hg|\.svn|packages|build|Mnesia\.node.*|data.run/ct|data.run/dets|data.run/mnesia|data.run/sw_backup)$',
+        \ 'dir'  : '\v(\.git|\.hg|\.svn|packages|build|Mnesia\.node.*|data.run/ct|data.run/dets|data.run/mnesia|data.run/sw_backup|data.run.120/ct|data.run.120/dets|data.run.120/mnesia|data.run.120/sw_backup)$',
         \ 'file' : '\v(\.hi|\.o|\.jpg|\.jpeg|\.bmp\.png\.exe|\.so|\.dll|\.beam|\.pyc|\~)$',
         \ 'link' : '\vpackages$'
         \ }
@@ -279,6 +279,11 @@
     autocmd FileType javascript    setlocal omnifunc=javascriptcomplete#CompleteJS
     autocmd FileType python        setlocal omnifunc=pythoncomplete#Complete
     autocmd FileType xml           setlocal omnifunc=xmlcomplete#CompleteTags
+
+    " Close the scratch window which is shown when working with python file
+    " set completeopt-=preview
+    " Close the preview window when completion is done
+    " au CompleteDone * pclose
 " }}}
 
 " NeoSnippet {{{
@@ -599,7 +604,7 @@ autocmd FileType erlang setlocal iskeyword+=:
             \ 'g')
       call system('xdg-open ' . url . q)
     endfunction
-    xnoremap <leader>? y:call <SID>google()<CR>
+    noremap <leader>? y:call <SID>google()<CR>
 " }}}
 
 " Work {{{
@@ -619,6 +624,20 @@ autocmd FileType erlang setlocal iskeyword+=:
            \ . " " . expand('%:p')
     endfunction
     cnoreabbrev <expr> csw getcmdtype()==':' && getcmdline()=='csw' ? GenSuperWingsErlc() : 'csw'
+
+    function! ViewSuperWingsLog(...)
+        let host = a:1
+        let node_name = a:2
+        let base = ":r scp://root@" . host . "//data/sw_server/sw_log/" .node_name . "@" . node_name . ".sw.79643.com/server.log"
+        if a:0 == 2
+            " view the most recent log
+            exec base
+        elseif a:0 == 3
+            " view the specified log
+            exec base . "." . a:3
+        endif
+    endfunction
+    command -nargs=* Vl call ViewSuperWingsLog(<f-args>)
 " }}}
 
 " Markdown {{{
