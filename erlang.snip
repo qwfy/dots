@@ -1,123 +1,79 @@
 snippet gen_server
 options head
+    -module(${1}).
+
     -behaviour(gen_server).
 
-    %% Gen server callbacks
-    -export([init/1,
-             handle_call/3, handle_cast/2, handle_info/2,
-             terminate/2,
-             code_change/3]).
+    -export([init/1, terminate/2, code_change/3,
+             handle_call/3, handle_cast/2, handle_info/2]).
+
+    init([]) ->
+        {ok, some_state}.
 
 
-    %% ====================================
+    handle_call(Request, _From, State) ->
+        error_logger:warning_report([{unhandled_call, Request}]),
+        {noreply, State}.
 
-    -type state() :: map().
-
-    -spec init(Args :: term())
-          -> {ok, State :: state()}
-           | {ok, State :: state(), timeout()}
-           | {ok, State :: state(), hibernate}
-           | {stop, Reason :: term()}
-           | ignore.
-
-    init(${1}) ->
-        {ok, #{}}.
-
-
-    -spec handle_call(Request :: term(), From :: {pid(), Tag :: term()}, State :: state())
-          -> {reply, Reply :: term(), NewState :: state()}
-           | {reply, Reply :: term(), NewState :: state(), timeout()}
-           | {reply, Reply :: term(), NewState :: state(), hibernate}
-           | {noreply, NewState :: state()}
-           | {noreply, NewState :: state(), timeout()}
-           | {noreply, NewState :: state(), hibernate}
-           | {stop, Reason :: term(), Reply, NewState :: state()}
-           | {stop, Reason :: term(), NewState :: state()}.
-
-    handle_call(Request, From, State) ->
-        error_logger:warning_report([{unhandled_call, Request},
-                                     {from, From}]),
-        {reply, '$REPLY_CONTENT', State}.
-
-
-    -spec handle_cast(Request :: term(), State :: state())
-          -> {noreply, NewState :: state()}
-           | {noreply, NewState :: state(), timeout()}
-           | {noreply, NewState :: state(), hibernate}
-           | {stop, Reason :: term(), NewState :: state()}.
 
     handle_cast(Request, State) ->
         error_logger:warning_report([{unhandled_cast, Request}]),
         {noreply, State}.
 
 
-    -spec handle_info(Info :: timeout | term(), State :: state())
-          -> {noreply, NewState :: state()}
-           | {noreply, NewState :: state(), timeout()}
-           | {noreply, NewState :: state(), hibernate}
-           | {stop, Reason :: term(), NewState :: state()}.
-
     handle_info(Info, State) ->
         error_logger:warning_report([{unhandled_info, Info}]),
         {noreply, State}.
 
 
-    -spec terminate(Reason :: normal | shutdown | {shutdown, term()} | term(), State :: state())
-          -> ignore.
-
     terminate(_Reason, _State) ->
         ignore.
 
 
-    -spec code_change(OldVsn :: term() | {down, term()}, State :: state(), Extra :: term())
-          -> {ok, NewState :: state()}
-           | {error, Reason :: term()}.
-
     code_change(_OldVsn, State, _Extra) ->
         {ok, State}.
 
-    %% ====================================
 
 snippet supervisor
 options head
+    -module(${1}_sup).
+
     -behaviour(supervisor).
 
-    %% Supervisor callback
     -export([init/1]).
 
-    -spec init(Args :: term())
-          -> {ok, { { RestartStrategy :: one_for_one | one_for_all | rest_for_one | simple_one_for_one
-                    , MaxR
-                    , MaxT
-                    }
-                  , [ChildSpec]
-                  }}
-          | ignore.
+    -export([start_link/0]).
 
+    start_link() ->
+        supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
-    init([${1}]) ->
-        {ok, {{RestartStrategy, MaxR, MaxT},
-              [ChildId,
-               {M, F, A},
-               permanent | transient | temporary,
-               brutal_kill | integer() | infinity,
-               worker| supervisor,
-               [M]
-              ]}}.
+    init([]) ->
+        SupFlags = #{strategy  => one_for_all | one_for_one | rest_for_one | simple_one_for_one,
+                     intensity => integer() >= 0,
+                     period    => integer() >= 1}, %% unit: second
+        ChildSpecs = [#{id       => child_id(),
+                        start    => mfargs(),
+                        restart  => permanent | transient | temporary
+                        shutdown => brutal_kill | timeout() %% unit: 1/1000 second
+                        type     => worker | supervisor
+                        modules  => modules()}],
+        {ok, {SupFlags, ChildSpecs}}.
 
 
 snippet application
 options head
+    -module(${1}_app).
+
     -behaviour(application).
 
-    %% Application callbacks
     -export([start/2, stop/1]).
 
     start(_StartType, _StartArgs) ->
-        {ok, Pid}.
+        {ok, SupPid} = ${2}_sup:start_link(),
+        {ok, SupPid}.
 
-    stop(State) ->
-        ignored.
+    stop(_State) ->
+        ignore.
 
 
 snippet module
@@ -142,7 +98,7 @@ options head
 
 snippet ioformat
 options word
-  io:format("${1}~p~n", [${2}]),
+  io:format("~p~n", []),
 
 
 snippet case

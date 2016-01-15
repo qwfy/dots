@@ -159,13 +159,13 @@
     nnoremap <A-2> <ESC>VypVr-k$jo<ESC>
 
     " Pair
-    inoremap '' ''<ESC>i
-    inoremap "" ""<ESC>i
-    inoremap `` ``<ESC>i
-    inoremap <> <><ESC>i
-    inoremap () ()<ESC>i
-    inoremap [] []<ESC>i
-    inoremap {} {}<ESC>i
+    inoremap ' ''<ESC>i
+    inoremap " ""<ESC>i
+    inoremap ` ``<ESC>i
+    inoremap < <><ESC>i
+    inoremap ( ()<ESC>i
+    inoremap [ []<ESC>i
+    inoremap { {}<ESC>i
 
     nnoremap ; :
     vnoremap ; :
@@ -245,9 +245,6 @@
 " CtrlP {{{
     let g:ctrlp_open_multiple_files='rv'
     let g:ctrlp_open_new_file = 'r'
-    "
-    " e: <cr> to jump to window in current tab if exist, otherwise open new
-    " T: <c-t> jump to window anyware if exist, otherwise open new
     let g:ctrlp_switch_buffer = 'h'
 
     let g:ctrlp_clear_cache_on_exit=0
@@ -256,8 +253,8 @@
     let g:ctrlp_regexp=1
     let g:ctrlp_show_hidden=0
     let g:ctrlp_custom_ignore={
-        \ 'dir'  : '\v(\.git|\.hg|\.svn|packages|build|Mnesia\.node.*|data.run/ct|data.run/dets|data.run/mnesia|data.run/sw_backup|data.run.120/ct|data.run.120/dets|data.run.120/mnesia|data.run.120/sw_backup)$',
-        \ 'file' : '\v(\.hi|\.o|\.jpg|\.jpeg|\.bmp\.png\.exe|\.so|\.dll|\.beam|\.pyc|\~)$',
+        \ 'dir'  : '\v(\.git|\.hg|\.svn|packages|build|Mnesia\.node.*|data.run)$',
+        \ 'file' : '\v(\.hi|\.o|\.jpg|\.jpeg|\.bmp\.png\.exe|\.so|\.dll|\.beam|\.pyc|\~|\.xlsx\.docx)$',
         \ 'link' : '\vpackages$'
         \ }
     noremap <Leader>m <Esc>:CtrlPMRU<CR>
@@ -265,6 +262,7 @@
 
 " NerdTree {{{
     noremap <A-n> :NERDTreeToggle<CR>
+    let g:NERDTreeChDirMode=0 " never auto change cwd for vim
 " }}}
 
 " NeoComplete {{{
@@ -642,6 +640,10 @@ autocmd FileType erlang setlocal iskeyword+=:
 
 " Markdown {{{
     autocmd FileType markdown setlocal nobreakindent wrap showbreak=
+" }}}
+
+" Pandoc {{{
+    let g:pandoc#modules#disabled = ["chdir", "spell"]
 " }}}
 
 " vim:fdm=marker

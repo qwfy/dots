@@ -5,7 +5,7 @@ export PROMPT_COMMAND="history -a; history -c; history -r;"
 export PS1='\[\e[32m\][\u@\h \w]\[\e[0m\]\n\[\e[32m\]<<\[\e[0m\] '
 
 export PATH=$PATH:~/bin:~/.cabal/bin
-
+unset CDPATH
 
 # aliases
 alias fuckccp='echo "CCP is being fucked ...";ssh -N -D 9050 root@aixon.co'
