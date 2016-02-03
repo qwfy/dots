@@ -3,6 +3,7 @@ function FindProxyForURL(url, host) {
   ( "acm.org"
   , "archbang.org"
   , "schemasync.org"
+  , "fonts.net"
   , "pastebin.com"
   , "lemire.me"
   , "tamewildsystems.com"
