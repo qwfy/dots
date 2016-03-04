@@ -34,6 +34,53 @@ options head
         {ok, State}.
 
 
+snippet gen_fsm
+options head
+    -module(${1}).
+
+    -behaviour(gen_fsm).
+
+    -export([init/1,
+             handle_event/3,
+             handle_sync_event/4,
+             handle_info/3,
+             terminate/3,
+             code_change/4]).
+
+
+    init(Args) ->
+        {ok, StateName, StateData}.
+
+
+    StateName(Event, StateData) ->
+        {next_state, NextStateName, NewStateData}.
+
+
+    handle_event(Event, StateName, StateData) ->
+        {next_state, NextStateName, NewStateData}.
+
+
+    StateName(Event, From, StateData) ->
+        {next_state, NextStateName, NewStateData}.
+
+
+    handle_sync_event(Event, From, StateName, StateData) ->
+        {reply, Reply, NextStateName, NewStateData}.
+
+
+    handle_info(Info, StateName, StateData) ->
+        {next_state, NextStateName, NewStateData}.
+
+
+    terminate(_Reason, _StateName, _StateData) ->
+        ok.
+
+
+    code_change(OldVsn, StateName, StateData, Extra) ->
+        {ok, NextStateName, NewStateData}.
+
+
+
 snippet supervisor
 options head
     -module(${1}_sup).
@@ -95,10 +142,11 @@ snippet include
 options head
     -include("${1}.hrl").
 
+snippet ioformat0
+  io:format("$1~n"),
 
 snippet ioformat
-options word
-  io:format("~p~n", []),
+  io:format("$1~p~n", [$1]),
 
 
 snippet case
@@ -107,7 +155,7 @@ snippet case
     end,
 
 
-snippet if
+snippet iftrue
     if ${1} -> ${2};
        true -> ${3}
     end,
@@ -119,28 +167,31 @@ snippet fun
 
 
 snippet filter
-    lists:filter(fun(${1}) ->
-                 end, ),
+    lists:filter(fun() ->
+                 end, ${1}),
 
 
 snippet map
-    lists:map(fun(${1}) ->
-              end, ),
+    lists:map(fun() ->
+              end, ${1}),
 
 snippet filtermap
-    lists:filtermap(fun(${1}) ->
-                    end, ),
+    lists:filtermap(fun() ->
+                    end, ${1}),
 
 snippet foreach
-    lists:foreach(fun(${1}) ->
-                  end, ),
+    lists:foreach(fun() ->
+                  end, ${1}),
 
 
 snippet foldl
-    lists:foldl(fun(${1}) ->
-                end, , ),
+    lists:foldl(fun() ->
+                end, , ${1}),
 
 
 snippet foldr
-    lists:foldr(fun(${1}) ->
-                end, , ),
+    lists:foldr(fun() ->
+                end, , ${1}),
+
+snippet comprehension
+    [ || <- ${1}],
