@@ -125,12 +125,12 @@ options head
 
 snippet module
 options head
-  -module(${0}).
+  -module(${1}).
 
 
 snippet export
 options head
-  -export([${0}]).
+  -export([${1}]).
 
 
 snippet record
@@ -143,10 +143,10 @@ options head
     -include("${1}.hrl").
 
 snippet ioformat0
-  io:format("$1~n"),
+  io:format("${1}~n"),
 
 snippet ioformat
-  io:format("$1~p~n", [$1]),
+  io:format("${1}~p~n", [${2}]),
 
 
 snippet case

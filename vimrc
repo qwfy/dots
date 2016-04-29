@@ -234,6 +234,9 @@
     " Misc
     noremap <A-d> <ESC>:bd!<CR>
     map <DEL> ~
+
+    " Allow saving of files as sudo when I forgot to start vim using sudo.
+    " cmap w!! w !sudo tee > /dev/null %
 " }}}
 
 " Tabular {{{

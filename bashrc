@@ -4,7 +4,7 @@ export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 export PROMPT_COMMAND="history -a; history -c; history -r;"
 export PS1='\[\e[32m\][\u@\h \w]\[\e[0m\]\n\[\e[32m\]<<\[\e[0m\] '
 
-export PATH=$PATH:~/bin:~/.cabal/bin
+export PATH=$PATH:~/.local/bin:~/bin:~/.cabal/bin
 unset CDPATH
 
 # aliases
