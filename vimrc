@@ -6,43 +6,52 @@
     call vundle#begin()
 
     Plugin 'gmarik/Vundle.vim'
+
+    Plugin 'altercation/vim-colors-solarized'
+
+    Plugin 'kien/ctrlp.vim'
+    Plugin 'mileszs/ack.vim'
+    Plugin 'scrooloose/syntastic'
+    Plugin 'xolox/vim-session'
+
     Plugin 'Shougo/neocomplete.vim'
     Plugin 'Shougo/neosnippet'
     Plugin 'Shougo/neosnippet-snippets'
-    Plugin 'Shougo/vimproc.vim'
-    Plugin 'Twinside/vim-hoogle'
+
     Plugin 'airblade/vim-rooter'
-    Plugin 'altercation/vim-colors-solarized'
-    Plugin 'dart-lang/dart-vim-plugin'
+    Plugin 'Shougo/vimproc.vim'
     Plugin 'dkprice/vim-easygrep'
-    Plugin 'eagletmt/ghcmod-vim'
-    Plugin 'eagletmt/neco-ghc'
-    Plugin 'elmcast/elm-vim'
-    Plugin 'fishcakez/vim-rebar'
     Plugin 'fmoralesc/vim-pad'
     Plugin 'godlygeek/tabular'
     Plugin 'gorkunov/smartpairs.vim'
     Plugin 'henrik/vim-indexed-search'
-    Plugin 'kien/ctrlp.vim'
     Plugin 'majutsushi/tagbar'
-    Plugin 'mileszs/ack.vim'
     Plugin 'othree/xml.vim'
     Plugin 'scrooloose/nerdtree'
-    Plugin 'scrooloose/syntastic'
     Plugin 'thinca/vim-ref'
     Plugin 'tmhedberg/matchit'
     Plugin 'tomtom/tcomment_vim'
     Plugin 'tpope/vim-fugitive'
     Plugin 'tpope/vim-markdown'
     Plugin 'tpope/vim-surround'
-    Plugin 'vim-erlang/vim-erlang-tags'
     Plugin 'vim-pandoc/vim-pandoc'
     Plugin 'vim-pandoc/vim-pandoc-after'
     Plugin 'vim-pandoc/vim-pandoc-syntax'
     Plugin 'vim-scripts/drawit'
     Plugin 'xolox/vim-easytags'
     Plugin 'xolox/vim-misc'
-    Plugin 'xolox/vim-session'
+
+    Plugin 'elmcast/elm-vim'
+    Plugin 'dart-lang/dart-vim-plugin'
+
+    Plugin 'fishcakez/vim-rebar'
+    Plugin 'vim-erlang/vim-erlang-tags'
+
+    Plugin 'Twinside/vim-hoogle'
+    Plugin 'eagletmt/ghcmod-vim'
+    Plugin 'eagletmt/neco-ghc'
+    Plugin 'neovimhaskell/haskell-vim'
+    " Plugin 'itchyny/vim-haskell-indent'
 
     call vundle#end()
     filetype plugin on
@@ -51,8 +60,7 @@
 
 " VIM Options {{{
     let $PATH.=':'.expand('~/bin')
-    let $PATH.=':'.expand('~/codes/ghc-mod/dist/7.10.1/build/ghc-mod/')
-    let $PATH.=':'.expand('~/codes/ghc-mod/dist/7.10.1/build/ghc-modi/')
+    let $PATH.=':'.expand('~/.local/bin')
     scriptencoding utf-8
     set nocompatible
 
@@ -124,8 +132,6 @@
 " }}}
 
 " Folding {{{
-    set foldmethod=syntax
-
     " Don't fold by default
     set nofoldenable
 
@@ -147,10 +153,17 @@
     iabbrev todo TODO
     iabbrev fixme FIXME
 
-    inoremap ;; ::
     inoremap .. ->
-    inoremap << <-
+    inoremap ... ...
     inoremap -> ..
+    inoremap << <-
+    " inoremap >> <<>>
+
+    inoremap ;; ::
+    inoremap ,, =>
+    inoremap // (\)
+    inoremap /// //
+
 
     " For markdown headers
     inoremap <A-1> <ESC>VypVr=k$jo<ESC>o
@@ -159,9 +172,9 @@
     nnoremap <A-2> <ESC>VypVr-k$jo<ESC>
 
     " Pair
-    inoremap ' ''<ESC>i
-    inoremap " ""<ESC>i
-    inoremap ` ``<ESC>i
+    inoremap '' ''<ESC>i
+    inoremap "" ""<ESC>i
+    inoremap `` ``<ESC>i
     inoremap < <><ESC>i
     inoremap ( ()<ESC>i
     inoremap [ []<ESC>i
@@ -177,7 +190,7 @@
     nnoremap Y y$
 
     vnoremap <C-Insert> "+y
-    nnoremap <S-Insert> "+p
+    nnoremap <S-Insert> "*p
 
     " Toggle command line window
     noremap <A-;> q:
@@ -192,6 +205,7 @@
     cnoremap <C-H> <Left>
     cnoremap <C-L> <Right>
 
+    noremap <F2>  <ESC>:let @/ = expand('<cword>')\|set hlsearch<CR>
     noremap <F3>  <ESC>:noh<CR>:echom 'Cancelled highlight'<CR>:redraw!<CR>
     noremap <F4>  :s/^\(.\{-}\)\s*$/\1/g<CR><ESC>:noh<CR>:echom 'Trailing whitespaces removed'<CR>
     noremap <F5>  :s/^\s*\(.\{-}\)\s*$/\1/g<CR><ESC>:noh<CR>:echom 'Leading and trailing whitespaces removed'<CR>
@@ -398,6 +412,14 @@ cnoreabbrev <expr> ack getcmdtype()==':' && getcmdline()=='ack' ? 'Ack' : 'ack'
     nnoremap <Leader>hh :Hoogle<CR>
     nnoremap <Leader>hi :HoogleInfo<CR>
     nnoremap <Leader>hc :HoogleClose<CR>
+
+    " GhcMod
+    nnoremap <Leader>tw :GhcModTypeInsert<CR>
+    nnoremap <Leader>ts :GhcModSplitFunCase<CR>
+    nnoremap <Leader>tq :GhcModType<CR>
+    nnoremap <Leader>te :GhcModTypeClear<CR>
+
+    " let g:haskell_classic_highlighting = 1
 
     " Tagbar
     let g:tagbar_type_haskell =

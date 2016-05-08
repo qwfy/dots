@@ -2,10 +2,14 @@ function FindProxyForURL(url, host) {
   var victims = new Array
   ( "acm.org"
   , "archbang.org"
+  , "ssa.gov"
+  , "udacity.com"
   , "schemasync.org"
-  , "fonts.net"
+  , "tensorflow.org"
+  // , "coursera.org"
   , "pastebin.com"
   , "lemire.me"
+  // , "cloudfront.net"
   , "tamewildsystems.com"
   , "darcs.net"
   , "r2d3.us"
@@ -16,7 +20,7 @@ function FindProxyForURL(url, host) {
   , "dreamhost.com"
   , "bbc.com"
   , "gameloft.com"
-  , "digitalocean.com"
+  // , "digitalocean.com"
   , "dropboxusercontent.com"
   , "bestvpnchina.net"
   , "soundcloud.com"
@@ -26,7 +30,6 @@ function FindProxyForURL(url, host) {
   , "softether.org"
   , "softether-download.com"
   , "erlang.org"
-  // , "images-amazon.com"
   , "appspot.com"
   , "haskellforall.com"
   , "wp.com"
@@ -119,7 +122,6 @@ function FindProxyForURL(url, host) {
   , "geocities.com"
   , "youtube.com"
   , "ytimg.com"
-  , "cdn.com"
   );
 
   for(var i=0; i<victims.length; i++) {

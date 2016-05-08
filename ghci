@@ -2,4 +2,3 @@
 :set -XTupleSections
 :def hh \x -> return $ ":!hoogle \"" ++ x ++ "\""
 :def ii \x -> return $ ":!hoogle --info \"" ++ x ++ "\""
-:cd ~/codes/haskell
