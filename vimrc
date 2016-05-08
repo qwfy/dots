@@ -128,7 +128,7 @@
     exec "set showbreak=↳"
     set showbreak+=\ 
 
-    set tags=tags,codex.tags,~/codes/otp_src_18.1/tags
+    set tags=tags,codex.tags,~/codes/otp_src_18.2.1/tags
 " }}}
 
 " Folding {{{
