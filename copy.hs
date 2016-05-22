@@ -4,6 +4,7 @@ import System.Environment
 import System.FilePath
 import System.Directory
 import Control.Monad (liftM)
+import Control.Applicative ((<$>))
 
 repoPath = "~/codes/dots"
 -- path:  (osLocation                             , repoLocation)
@@ -15,6 +16,7 @@ files = [ ("~/.vimrc"                             , "$repoPath/vimrc")
         , ("~/bin/pac.js"                         , "$repoPath/pac.js")
         , ("~/.bashrc"                            , "$repoPath/bashrc")
         , ("~/.vim/snippets/erlang.snip"          , "$repoPath/erlang.snip")
+        , ("~/.vim/snippets/haskell.snip"         , "$repoPath/haskell.snip")
         , ("~/.local/share/konsole/Shell.profile" , "$repoPath/Shell.profile")
         , ("~/.config/octave/qt-settings"         , "$repoPath/octave.qt-settings")
         , ("~/.octaverc"                          , "$repoPath/octaverc")
@@ -23,7 +25,7 @@ files = [ ("~/.vimrc"                             , "$repoPath/vimrc")
 expandPath :: FilePath -> IO FilePath
 expandPath p =
     let paths = splitDirectories p
-    in liftM joinPath $ mapM expandOne paths
+    in joinPath <$> mapM expandOne paths
     where expandOne :: FilePath -> IO FilePath
           expandOne "~" = getEnv "HOME"
           expandOne "$repoPath" = expandPath repoPath

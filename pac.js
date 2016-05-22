@@ -2,6 +2,7 @@ function FindProxyForURL(url, host) {
   var victims = new Array
   ( "acm.org"
   , "archbang.org"
+  , "t.co"
   , "ssa.gov"
   , "udacity.com"
   , "schemasync.org"
