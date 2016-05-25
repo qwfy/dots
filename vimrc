@@ -179,6 +179,9 @@
     vnoremap <C-Insert> "+y
     nnoremap <S-Insert> "+p
 
+    nnoremap 0 ^
+    nnoremap ^ 0
+
     " Toggle command line window
     noremap <A-;> q:
     autocmd CmdwinEnter * noremap <buffer> <ESC> <ESC>:q<CR>
@@ -233,6 +236,7 @@
 
     " Misc
     noremap <A-d> <ESC>:bd!<CR>
+    noremap <A-w> <ESC>:wincmd c<CR>
     map <DEL> ~
 
     " Allow saving of files as sudo when I forgot to start vim using sudo.
