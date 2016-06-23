@@ -161,8 +161,7 @@
 
     inoremap ;; ::
     inoremap ,, =>
-    inoremap // (\)
-    inoremap /// //
+    inoremap \\ (\)
 
 
     " For markdown headers
@@ -254,7 +253,7 @@
     map <DEL> ~
 
     " Allow saving of files as sudo when I forgot to start vim using sudo.
-    " cmap w!! w !sudo tee > /dev/null %
+    cmap w!! w !sudo tee > /dev/null %
 " }}}
 
 " Tabular {{{
@@ -373,7 +372,7 @@
 
 " Ag {{{
 let g:ackprg = 'ag --nogroup --nocolor --column --ignore=tags --skip-vcs-ignores'
-cnoreabbrev <expr> ack getcmdtype()==':' && getcmdline()=='ack' ? 'Ack' : 'ack'
+cnoreabbrev <expr> ag getcmdtype()==':' && getcmdline()=='ag' ? 'Ack' : 'ag'
 " }}}
 
 " EasyGrep {{{
