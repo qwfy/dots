@@ -144,7 +144,7 @@
 " }}}
 
 " Key Bindings {{{
-    " C-S, C-C, C-V
+    " C-S
     noremap  <C-S> :update<CR>
     vnoremap <C-S> <C-C>:update<CR>
     inoremap <C-S> <C-O>:update<CR>
@@ -189,7 +189,7 @@
     nnoremap Y y$
 
     vnoremap <C-Insert> "+y
-    nnoremap <S-Insert> "*p
+    nnoremap <S-Insert> "+p
 
     nnoremap 0 ^
     nnoremap ^ 0
@@ -464,6 +464,8 @@ cnoreabbrev <expr> ag getcmdtype()==':' && getcmdline()=='ag' ? 'Ack' : 'ag'
 
 " Erlang {{{
 autocmd FileType erlang setlocal iskeyword+=:
+let g:erlang_tags_ignore = ["_build"]
+
 " }}}
 
 " Python {{{
@@ -651,6 +653,22 @@ autocmd FileType erlang setlocal iskeyword+=:
     endfunction
     cnoreabbrev <expr> csw getcmdtype()==':' && getcmdline()=='csw' ? GenSuperWingsErlc() : 'csw'
 
+    function! GenThreeKingdomsErlc()
+        let cwd = getcwd()
+        return "!erlc"
+           \ . " -pa" . cwd . "/core/lager/ebin"
+           \ . " -I"  . cwd . "/core/"
+           \ . " -I"  . cwd . "/_build/default/lib/server/include"
+           \ . " -o"  . cwd . "/_build/default/lib/server/ebin"
+           \ . " -Wall"
+           \ . " +'{parse_transform, lager_transform}'"
+           \ . " +'{lager_print_records_flag, false}'"
+           \ . " +debug_info"
+           \ . " +bin_opt_info"
+           \ . " " . expand('%:p')
+    endfunction
+    cnoreabbrev <expr> ctk getcmdtype()==':' && getcmdline()=='ctk' ? GenThreeKingdomsErlc() : 'ctk'
+
     function! ViewSuperWingsLog(...)
         let host = a:1
         let node_name = a:2
@@ -664,6 +682,20 @@ autocmd FileType erlang setlocal iskeyword+=:
         endif
     endfunction
     command -nargs=* Vl call ViewSuperWingsLog(<f-args>)
+
+    function! ViewTKLog(...)
+        let host = a:1
+        let node_name = a:2
+        let base = ":r scp://root@" . host . "//data/tk/ThreeKingdomsServer/logs/" .node_name . "@" . node_name . ".tk.79643.com/server.log"
+        if a:0 == 2
+            " view the most recent log
+            exec base
+        elseif a:0 == 3
+            " view the specified log
+            exec base . "." . a:3
+        endif
+    endfunction
+    command -nargs=* Vtk call ViewTKLog(<f-args>)
 " }}}
 
 " Markdown {{{
