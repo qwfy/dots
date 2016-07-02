@@ -1,6 +1,7 @@
 snippet module
 options head
-    module ${0} where
+    module ${1} where
+        ${0}
 
 snippet deriving
     deriving (Eq, Show)
@@ -12,10 +13,11 @@ snippet deq
     deriving Eq
 
 snippet language
-    {-# LANGUAGE #-}
+    {-# LANGUAGE ${1} #-}
 
 snippet io
     IO ()
 
 snippet main
     main :: IO ()
+    ${0}

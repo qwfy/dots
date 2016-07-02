@@ -16,6 +16,7 @@ alias ls='ls --color=auto'
 alias vi=vim
 alias vir='vim -R'
 alias x='exit'
+alias sg='stack ghci'
 
 function update-vim-plugins {
     orig_dir=$(pwd)

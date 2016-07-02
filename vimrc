@@ -174,7 +174,7 @@
     inoremap '' ''<ESC>i
     inoremap "" ""<ESC>i
     inoremap `` ``<ESC>i
-    inoremap < <><ESC>i
+    inoremap <> <><ESC>i
     inoremap ( ()<ESC>i
     inoremap [ []<ESC>i
     inoremap { {}<ESC>i
@@ -258,6 +258,7 @@
 
 " Tabular {{{
     vnoremap <silent> <leader>t :Tabular /
+    vnoremap <silent> <leader>t: :Tabular /:\zs<CR>
     " Enable some tabular presets for Haskell
     let g:haskell_tabular = 1
 " }}}
