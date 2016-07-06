@@ -1,6 +1,7 @@
 export HISTCONTROL=ignoredups:erasedups
 shopt -s histappend
 export PROMPT_COMMAND="history -a; history -c; history -r"
+export EDITOR=vim
 
 export PATH=$PATH:~/.local/bin/:~/bin/
 
