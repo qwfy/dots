@@ -4,6 +4,7 @@ function FindProxyForURL(url, host) {
   , "archbang.org"
   , "instagram.com"
   , "arstechnica.com"
+  , "deepmind.com"
   , "knowyourmobile.com"
   , "yibada.com"
   , "t.co"

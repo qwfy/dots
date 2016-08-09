@@ -28,3 +28,5 @@
     show = "vim -R \"+set filetype=${1##*.}\" -"
 [pull]
 	rebase = false
+[merge]
+	tool = kdiff3

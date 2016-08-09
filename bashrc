@@ -18,6 +18,12 @@ alias vi=vim
 alias vir='vim -R'
 alias x='exit'
 alias sg='stack ghci'
+alias bk='cd ../'
+alias bkk='cd ../../'
+alias bkkk='cd ../../../'
+alias bkkkk='cd ../../../../'
+
+
 
 function update-vim-plugins {
     orig_dir=$(pwd)
