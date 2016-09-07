@@ -52,6 +52,7 @@
     Plugin 'eagletmt/neco-ghc'
     Plugin 'neovimhaskell/haskell-vim'
     " Plugin 'itchyny/vim-haskell-indent'
+    Plugin 'hynek/vim-python-pep8-indent'
 
     call vundle#end()
     filetype plugin on
@@ -470,7 +471,7 @@ let g:erlang_tags_ignore = ["_build"]
 " }}}
 
 " Python {{{
-    autocmd! FileType python setlocal nosmartindent
+    " autocmd! FileType python setlocal nosmartindent
 " }}}
 
 " HTML Development {{{

@@ -24,8 +24,8 @@
 #     proxy = socks5://127.0.0.1:9050
 # [https]
 #     proxy = socks5://127.0.0.1:9050
-[pager]
-    show = "vim -R \"+set filetype=${1##*.}\" -"
+# [pager]
+#     show = "vim -R \"+set filetype=${1##*.}\" -"
 [pull]
 	rebase = false
 [merge]
