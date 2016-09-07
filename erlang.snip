@@ -87,7 +87,6 @@ options head
         {ok, NextStateName, NewStateData}.
 
 
-
 snippet supervisor
 options head
     -module(${1}_sup).
@@ -130,22 +129,11 @@ options head
         ignore.
 
 
-snippet module
+snippet -record
 options head
-  -module(${1}).
+    -record(${1}, {}).
 
-
-snippet export
-options head
-  -export([${1}]).
-
-
-snippet record
-options head
-    -record(${1}, {${2}}).
-
-
-snippet include
+snippet -include
 options head
     -include("${1}.hrl").
 
@@ -153,30 +141,27 @@ snippet ioformat0
   io:format("${1}~n"),
 
 snippet ioformat
-  io:format("${1}~p~n", [${2}]),
-
+  io:format("${1}~p~n", []),
 
 snippet case
     case ${1} of
-        ${2}
     end,
-
 
 snippet iftrue
-    if ${1} -> ${2};
-       true -> ${3}
+    if ${1} ->
+       true ->
     end,
-
 
 snippet fun
     fun(${1}) ->
     end,
 
+snippet funend
+    fun(${1}) -> ${2} end,
 
 snippet filter
     lists:filter(fun() ->
                  end, ${1}),
-
 
 snippet map
     lists:map(fun() ->
@@ -185,16 +170,13 @@ snippet map
 snippet filtermap
     lists:filtermap(fun() ->
                     end, ${1}),
-
 snippet foreach
     lists:foreach(fun() ->
                   end, ${1}),
 
-
 snippet foldl
     lists:foldl(fun() ->
                 end, , ${1}),
-
 
 snippet foldr
     lists:foldr(fun() ->
@@ -202,3 +184,27 @@ snippet foldr
 
 snippet comprehension
     [ || <- ${1}],
+
+snippet qlc
+    {atomic, } = mnesia:transaction(fun() -> qlc:e(qlc:q([ || <- mnesia:table(${1})])) end)
+
+snippet gencall
+    gen_server:call(${1})
+
+snippet gencast
+    gen_server:cast(${1})
+
+snippet handle_call
+options head
+    handle_call({${1}}, _From, State) ->
+    {reply, Reply, NewState};
+
+snippet handle_cast
+options head
+    handle_cast({${1}}, _From, State) ->
+    {noreply, NewState};
+
+snippet handle_info
+options head
+    handle_info(${1}, State) ->
+    {noreply, NewState};
