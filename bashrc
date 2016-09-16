@@ -3,12 +3,11 @@ shopt -s histappend
 export PROMPT_COMMAND="history -a; history -c; history -r"
 export EDITOR=vim
 
-export PATH=$PATH:~/.local/bin/:~/bin/
+export PATH=~/.local/bin/:~/bin/:$PATH
 
 export PS1='\[\e[32m\][\u@\h \w]\[\e[0m\]\n\[\e[32m\]<<\[\e[0m\] '
 
 # aliases
-alias fuckccp='echo "CCP is being fucked ...";ssh -N -D 9050 root@proxy; notify-send "SSH proxy closed"'
 alias hs='history | grep -i'
 alias l='ls'
 alias la='ls -a'
@@ -24,6 +23,12 @@ alias bkkk='cd ../../../'
 alias bkkkk='cd ../../../../'
 
 
+function fuckccp {
+    notify-send "Proxy started";
+    ssh -N -D 9050 root@proxy;
+    notify-send "Proxy closed";
+    fuckccp
+}
 
 function update-vim-plugins {
     orig_dir=$(pwd)
