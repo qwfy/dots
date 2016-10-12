@@ -9,17 +9,18 @@
     editor = vim
     excludesfile = ~/.gitignore
 [alias]
-	co = checkout
+    co = checkout
     cm = commit -m
     st = status
     br = branch
     lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     sl = stash list --pretty=format:'[%ai] %gd %s'
-	s = status
-	sp = stash pop
-	sd = stash drop
-	sa = stash apply
-	bl = branch --list
+    s = status
+    ss = stash save --include-untracked
+    sp = stash pop
+    sd = stash drop
+    sa = stash apply
+    bl = branch --list
 # [http]
 #     proxy = socks5://127.0.0.1:9050
 # [https]
@@ -27,6 +28,6 @@
 # [pager]
 #     show = "vim -R \"+set filetype=${1##*.}\" -"
 [pull]
-	rebase = false
+    rebase = false
 [merge]
-	tool = kdiff3
+    tool = kdiff3

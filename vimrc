@@ -21,9 +21,10 @@
     Plugin 'airblade/vim-rooter'
     Plugin 'Shougo/vimproc.vim'
     Plugin 'dkprice/vim-easygrep'
-    Plugin 'fmoralesc/vim-pad'
     Plugin 'godlygeek/tabular'
+    " viv
     Plugin 'gorkunov/smartpairs.vim'
+    " match M of N
     Plugin 'henrik/vim-indexed-search'
     Plugin 'majutsushi/tagbar'
     Plugin 'othree/xml.vim'
@@ -44,7 +45,6 @@
     Plugin 'elmcast/elm-vim'
     Plugin 'dart-lang/dart-vim-plugin'
 
-    Plugin 'fishcakez/vim-rebar'
     Plugin 'vim-erlang/vim-erlang-tags'
 
     Plugin 'Twinside/vim-hoogle'

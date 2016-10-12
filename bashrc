@@ -17,7 +17,7 @@ export PS1='\[\e[32m\][\u@\h \w$(__git_ps1 " (%s)")]\[\e[0m\]\n\[\e[32m\]<<\[\e[
 alias hs='history | grep -i'
 alias l='ls'
 alias la='ls -a'
-alias ll='ls -l'
+alias ll='ls -lh'
 alias ls='ls --color=auto'
 alias vi=vim
 alias vir='vim -R'
