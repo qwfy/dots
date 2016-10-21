@@ -22,10 +22,8 @@
     Plugin 'Shougo/vimproc.vim'
     Plugin 'dkprice/vim-easygrep'
     Plugin 'godlygeek/tabular'
-    " viv
-    Plugin 'gorkunov/smartpairs.vim'
-    " match M of N
-    Plugin 'henrik/vim-indexed-search'
+    Plugin 'gorkunov/smartpairs.vim'    " viv
+    Plugin 'henrik/vim-indexed-search'    " match M of N
     Plugin 'majutsushi/tagbar'
     Plugin 'othree/xml.vim'
     Plugin 'scrooloose/nerdtree'
@@ -51,7 +49,7 @@
     Plugin 'eagletmt/ghcmod-vim'
     Plugin 'eagletmt/neco-ghc'
     Plugin 'neovimhaskell/haskell-vim'
-    " Plugin 'itchyny/vim-haskell-indent'
+
     Plugin 'hynek/vim-python-pep8-indent'
 
     call vundle#end()
@@ -74,7 +72,7 @@
         set guioptions+=b
         set guicursor+=a:blinkon0 " do not blink cursor
         " set guifont=Input\ Mono\ 10
-        set guifont=Input\ 10
+        set guifont=Input\ 10.3
         colorscheme solarized
     else
         set background=dark
@@ -97,7 +95,7 @@
     set incsearch
     set hlsearch
     set ignorecase
-    set history=1000
+    set history=10000
     set laststatus=2
     set showcmd
     set wildignorecase
@@ -124,10 +122,9 @@
     " When 'wrap' is off, use '»' as the last column to indicate a wrap
     set listchars=extends:»
 
-    " When 'wrap' is on, use '↳ ' in the next line to indicate a wrap
+    " When 'wrap' is on, use '↳' in the next line to indicate a wrap
     highlight! link NonText Character
-    exec "set showbreak=↳"
-    set showbreak+=\ 
+    set showbreak=↳
 
     set tags=tags,~/codes/otp_src_18.2.1/tags,~/.python_tags
 " }}}
@@ -215,7 +212,6 @@
     noremap <F7>  <ESC><C-w>r<C-w>l<C-w>=
     noremap <F8>  :TagbarToggle<CR>
     noremap <F9>  <ESC>:setlocal wrap!<CR>
-    " noremap <F12>  <ESC>:w<CR>:!start cmd /c python "%" & pause<CR>
     noremap <F12> :%!python<CR>
 
     " Movement
@@ -253,7 +249,7 @@
     noremap <A-w> <ESC>:wincmd c<CR>
     map <DEL> ~
 
-    " Allow saving of files as sudo when I forgot to start vim using sudo.
+    " Saving of files as sudo when I forgot to start vim using sudo.
     cmap w!! w !sudo tee > /dev/null %
 " }}}
 
@@ -319,6 +315,8 @@
 
 " Syntastic {{{
     let g:syntastic_always_populate_loc_list = 1
+    let g:syntastic_error_symbol='E'
+    let g:syntastic_warning_symbol='W'
 
     let g:syntastic_python_checkers=['pylint']
     let g:syntastic_python_pylint_args='

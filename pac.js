@@ -3,6 +3,7 @@ function FindProxyForURL(url, host) {
   ( "acm.org"
   , "archbang.org"
   , "instagram.com"
+  , "domains.google"
   , "medium.com"
   , "arstechnica.com"
   , "deepmind.com"
