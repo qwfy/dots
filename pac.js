@@ -5,6 +5,7 @@ function FindProxyForURL(url, host) {
   , "instagram.com"
   , "domains.google"
   , "medium.com"
+  , "bloomberg.com"
   , "arstechnica.com"
   , "deepmind.com"
   , "knowyourmobile.com"

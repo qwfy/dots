@@ -148,8 +148,8 @@
     inoremap <C-S> <C-O>:update<CR>
 
     " Abbr
-    iabbrev todo TODO
-    iabbrev fixme FIXME
+    iabbrev todo TODO incomplete:
+    iabbrev fixme FIXME incomplete:
 
     inoremap .. ->
     inoremap ... ...

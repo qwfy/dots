@@ -13,6 +13,7 @@
     cm = commit -m
     st = status
     br = branch
+    bl = branch --list
     lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     sl = stash list --pretty=format:'[%ai] %gd %s'
     s = status
