@@ -1,3 +1,6 @@
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
 export HISTCONTROL=ignoredups:erasedups
 shopt -s histappend
 export PROMPT_COMMAND="history -a; history -c; history -r"
@@ -19,7 +22,6 @@ alias l='ls'
 alias la='ls -a'
 alias ll='ls -lh'
 alias ls='ls --color=auto'
-alias vi=vim
 alias vir='vim -R'
 alias x='exit'
 alias sg='stack ghci'
@@ -30,10 +32,11 @@ alias bkkkk='cd ../../../../'
 
 
 function fuckccp {
-    notify-send "Proxy started";
-    ssh -N -D 9050 root@proxy;
-    notify-send "Proxy closed";
-    fuckccp
+    systemctl --user start fuckccp.service
+}
+
+function refuckccp {
+    systemctl --user restart fuckccp.service
 }
 
 function update-vim-plugins {

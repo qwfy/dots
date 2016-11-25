@@ -31,6 +31,7 @@
     Plugin 'tmhedberg/matchit'
     Plugin 'tomtom/tcomment_vim'
     Plugin 'tpope/vim-fugitive'
+    Plugin 'airblade/vim-gitgutter'
     Plugin 'tpope/vim-markdown'
     Plugin 'tpope/vim-surround'
     Plugin 'vim-pandoc/vim-pandoc'
@@ -71,8 +72,7 @@
         set guioptions-=t
         set guioptions+=b
         set guicursor+=a:blinkon0 " do not blink cursor
-        " set guifont=Input\ Mono\ 10
-        set guifont=Input\ 10.3
+        set guifont=Input\ 9
         colorscheme solarized
     else
         set background=dark
@@ -126,7 +126,7 @@
     highlight! link NonText Character
     set showbreak=↳
 
-    set tags=tags,~/codes/otp_src_18.2.1/tags,~/.python_tags
+    set tags=tags,~/project/otp_src_18.2.1/tags,~/.python_tags
 " }}}
 
 " Folding {{{
@@ -209,6 +209,7 @@
     noremap <F3>  <ESC>:noh<CR>:echom 'Cancelled highlight'<CR>:redraw!<CR>
     noremap <F4>  :s/^\(.\{-}\)\s*$/\1/g<CR><ESC>:noh<CR>:echom 'Trailing whitespaces removed'<CR>
     noremap <F5>  :s/^\s*\(.\{-}\)\s*$/\1/g<CR><ESC>:noh<CR>:echom 'Leading and trailing whitespaces removed'<CR>
+    nnoremap <F6>  :exec 'silent !git difftool -y % &'<CR>:redraw!<CR>
     noremap <F7>  <ESC><C-w>r<C-w>l<C-w>=
     noremap <F8>  :TagbarToggle<CR>
     noremap <F9>  <ESC>:setlocal wrap!<CR>
@@ -389,6 +390,10 @@ cnoreabbrev <expr> ag getcmdtype()==':' && getcmdline()=='ag' ? 'Ack' : 'ag'
 " Session {{{
     set ssop-=options " do not store global and local values in a session
     set ssop-=folds   " do not store folds
+    set ssop-=help
+    set ssop-=buffers " don't save hidden and unloaded buffers
+    let g:session_persist_font = 0
+    let g:session_persist_colors = 0
     let g:session_autosave = 'yes'
     let g:session_autosave_periodic = 30
     let g:session_verbose_messages = 0
@@ -705,6 +710,12 @@ let g:erlang_tags_ignore = ["_build"]
 " Pandoc {{{
     let g:pandoc#modules#disabled = ["chdir", "spell"]
 " }}}
+
+" GitGutter {{{
+    let g:gitgutter_enabled = 0
+" }}}
+
+hi TabLineSel gui=reverse
 
 " vim:fdm=marker
 " vim:foldenable

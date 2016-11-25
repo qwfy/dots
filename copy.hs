@@ -6,21 +6,21 @@ import System.Directory
 import Control.Monad (liftM)
 import Control.Applicative ((<$>))
 
-repoPath = "~/codes/dots"
+repoPath = "~/project/dots"
 -- path:  (osLocation                             , repoLocation)
 files = [ ("~/.vimrc"                             , "$repoPath/vimrc")
         , ("~/.xinitrc"                           , "$repoPath/xinitrc")
-        , ("~/.xmodmap"                           , "$repoPath/xmodmap")
+        , ("~/.Xmodmap.not_used"                  , "$repoPath/xmodmap")
         , ("~/.wgetrc"                            , "$repoPath/wgetrc")
         , ("~/.gitconfig"                         , "$repoPath/gitconfig")
         , ("~/.ghci"                              , "$repoPath/ghci")
         , ("~/bin/pac.js"                         , "$repoPath/pac.js")
         , ("~/.bashrc"                            , "$repoPath/bashrc")
+        , ("~/.bash_profile"                      , "$repoPath/bash_profile")
         , ("~/.vim/snippets/erlang.snip"          , "$repoPath/erlang.snip")
         , ("~/.vim/snippets/haskell.snip"         , "$repoPath/haskell.snip")
-        , ("~/.local/share/konsole/Shell.profile" , "$repoPath/Shell.profile")
-        , ("~/.config/octave/qt-settings"         , "$repoPath/octave.qt-settings")
-        , ("~/.octaverc"                          , "$repoPath/octaverc")
+        -- , ("~/.octaverc"                          , "$repoPath/octaverc")
+        , ("~/.ssh/config"                        , "$repoPath/ssh_config")
         ]
 
 expandPath :: FilePath -> IO FilePath

@@ -17,7 +17,7 @@
     lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     sl = stash list --pretty=format:'[%ai] %gd %s'
     s = status
-    ss = stash save --include-untracked
+    ss = stash save
     sp = stash pop
     sd = stash drop
     sa = stash apply
