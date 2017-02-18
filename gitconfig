@@ -6,29 +6,33 @@
 [branch]
     autosetuprebase = never
 [core]
-    editor = vim
+    editor = nvim
     excludesfile = ~/.gitignore
 [alias]
+    s = status
+    t = tag -l --sort=v:refname
     co = checkout
     cm = commit -m
-    st = status
     br = branch
     bl = branch --list
     lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     sl = stash list --pretty=format:'[%ai] %gd %s'
-    s = status
     ss = stash save
     sp = stash pop
     sd = stash drop
     sa = stash apply
-    bl = branch --list
-# [http]
-#     proxy = socks5://127.0.0.1:9050
-# [https]
-#     proxy = socks5://127.0.0.1:9050
 # [pager]
 #     show = "vim -R \"+set filetype=${1##*.}\" -"
 [pull]
     rebase = false
 [merge]
-    tool = kdiff3
+	tool = kdiff3
+	keepbackup = false
+[cola]
+	fontdiff = Input,9,-1,5,50,0,0,0,0,0
+	tabwidth = 4
+[gui]
+	fontui = -family \"Noto Sans\" -size 9 -weight normal -slant roman -underline 0 -overstrike 0
+	fontdiff = -family Input -size 9 -weight normal -slant roman -underline 0 -overstrike 0
+[diff]
+	tool = kdiff3

@@ -2,5 +2,9 @@ Host *
     ServerAliveInterval 30
     ServerAliveCountMax 20
 
+Host 180.150.179.206
+    IdentityFile ~/.ssh/id_rsa_janlr
+    Port 2333
+
 Host jl_* sw_* tk_* 180.150.179.206 192.168.1.117
     IdentityFile ~/.ssh/id_rsa_janlr

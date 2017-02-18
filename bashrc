@@ -4,9 +4,9 @@
 export HISTCONTROL=ignoredups:erasedups
 shopt -s histappend
 export PROMPT_COMMAND="history -a; history -c; history -r"
-export EDITOR=vim
+export EDITOR=nvim
 
-export PATH=~/.local/bin/:~/bin/:$PATH
+export PATH=~/.local/bin/:~/bin/:$PATH:~/bin/erlang/18.3/bin
 
 source /usr/share/git/completion/git-prompt.sh
 export GIT_PS1_SHOWDIRTYSTATE=1     # + for staged, * if unstaged.
@@ -17,6 +17,8 @@ export GIT_PS1_SHOWUPSTREAM='auto'  # <,>,<> behind, ahead, or diverged from ups
 export PS1='\[\e[32m\][\u@\h \w$(__git_ps1 " (%s)")]\[\e[0m\]\n\[\e[32m\]<<\[\e[0m\] '
 
 # aliases
+alias vi='nvim'
+alias vim='nvim'
 alias hs='history | grep -i'
 alias l='ls'
 alias la='ls -a'
@@ -29,13 +31,14 @@ alias bk='cd ../'
 alias bkk='cd ../../'
 alias bkkk='cd ../../../'
 alias bkkkk='cd ../../../../'
+alias bkkkkk='cd ../../../../../'
 
 
 function fuckccp {
     systemctl --user start fuckccp.service
 }
 
-function refuckccp {
+function refuck_ccp_and_that_bitchs_father_mother_brother_and_any_other_sucker {
     systemctl --user restart fuckccp.service
 }
 

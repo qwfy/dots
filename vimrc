@@ -12,17 +12,19 @@
     Plugin 'kien/ctrlp.vim'
     Plugin 'mileszs/ack.vim'
     Plugin 'scrooloose/syntastic'
+    " Plugin 'w0rp/ale'
     Plugin 'xolox/vim-session'
 
     Plugin 'Shougo/neocomplete.vim'
     Plugin 'Shougo/neosnippet'
     Plugin 'Shougo/neosnippet-snippets'
 
+    Plugin 'sjl/gundo.vim'
     Plugin 'airblade/vim-rooter'
     Plugin 'Shougo/vimproc.vim'
     Plugin 'dkprice/vim-easygrep'
     Plugin 'godlygeek/tabular'
-    Plugin 'gorkunov/smartpairs.vim'    " viv
+    Plugin 'gorkunov/smartpairs.vim'      " viv
     Plugin 'henrik/vim-indexed-search'    " match M of N
     Plugin 'majutsushi/tagbar'
     Plugin 'othree/xml.vim'
@@ -31,7 +33,6 @@
     Plugin 'tmhedberg/matchit'
     Plugin 'tomtom/tcomment_vim'
     Plugin 'tpope/vim-fugitive'
-    Plugin 'airblade/vim-gitgutter'
     Plugin 'tpope/vim-markdown'
     Plugin 'tpope/vim-surround'
     Plugin 'vim-pandoc/vim-pandoc'
@@ -49,9 +50,15 @@
     Plugin 'Twinside/vim-hoogle'
     Plugin 'eagletmt/ghcmod-vim'
     Plugin 'eagletmt/neco-ghc'
-    Plugin 'neovimhaskell/haskell-vim'
+    Plugin 'itchyny/vim-haskell-indent'
 
     Plugin 'hynek/vim-python-pep8-indent'
+    Plugin 'davidhalter/jedi-vim'
+
+    " LaTex
+    Plugin 'xuhdev/vim-latex-live-preview'
+
+    Plugin 'vim-scripts/LargeFile'
 
     call vundle#end()
     filetype plugin on
@@ -78,6 +85,7 @@
         set background=dark
     endif
 
+    set mousemodel=popup
     let mapleader=","
     syntax on
 
@@ -122,11 +130,10 @@
     " When 'wrap' is off, use '»' as the last column to indicate a wrap
     set listchars=extends:»
 
-    " When 'wrap' is on, use '↳' in the next line to indicate a wrap
     highlight! link NonText Character
     set showbreak=↳
 
-    set tags=tags,~/project/otp_src_18.2.1/tags,~/.python_tags
+    set tags=tags,~/code/otp_src_18.2.1/tags,~/.python_tags
 " }}}
 
 " Folding {{{
@@ -148,8 +155,8 @@
     inoremap <C-S> <C-O>:update<CR>
 
     " Abbr
-    iabbrev todo TODO incomplete:
-    iabbrev fixme FIXME incomplete:
+    iabbrev todo: TODO incomplete:
+    iabbrev fixme: FIXME incomplete:
 
     inoremap .. ->
     inoremap ... ...
@@ -188,9 +195,10 @@
 
     vnoremap <C-Insert> "+y
     nnoremap <S-Insert> "+p
+    inoremap <S-Insert> <ESC>"+pa
 
-    nnoremap 0 ^
-    nnoremap ^ 0
+    " nnoremap 0 ^
+    " nnoremap ^ 0
 
     " Toggle command line window
     noremap <A-;> q:
@@ -210,9 +218,12 @@
     noremap <F4>  :s/^\(.\{-}\)\s*$/\1/g<CR><ESC>:noh<CR>:echom 'Trailing whitespaces removed'<CR>
     noremap <F5>  :s/^\s*\(.\{-}\)\s*$/\1/g<CR><ESC>:noh<CR>:echom 'Leading and trailing whitespaces removed'<CR>
     nnoremap <F6>  :exec 'silent !git difftool -y % &'<CR>:redraw!<CR>
+    nnoremap <C-F6>  :exec 'silent !gitk % &'<CR>:redraw!<CR>
     noremap <F7>  <ESC><C-w>r<C-w>l<C-w>=
     noremap <F8>  :TagbarToggle<CR>
     noremap <F9>  <ESC>:setlocal wrap!<CR>
+    noremap <F10>  <ESC>:GhcModType<CR>
+    noremap <F11>  <ESC>:GhcModTypeClear<CR>
     noremap <F12> :%!python<CR>
 
     " Movement
@@ -294,8 +305,15 @@
     autocmd FileType css           setlocal omnifunc=csscomplete#CompleteCSS
     autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
     autocmd FileType javascript    setlocal omnifunc=javascriptcomplete#CompleteJS
-    autocmd FileType python        setlocal omnifunc=pythoncomplete#Complete
+    autocmd FileType python        setlocal omnifunc=jedi#completions
     autocmd FileType xml           setlocal omnifunc=xmlcomplete#CompleteTags
+
+    let g:jedi#completions_enabled = 0
+    let g:jedi#auto_vim_configuration = 0
+    if !exists('g:neocomplete#force_omni_input_patterns')
+            let g:neocomplete#force_omni_input_patterns = {}
+    endif
+    let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 
     " Close the scratch window which is shown when working with python file
     " set completeopt-=preview
@@ -342,8 +360,8 @@
     let g:syntastic_sh_checkers=['shellcheck']
 
     let g:syntastic_mode_map =
-    \ { "mode": "active"
-    \ , "passive_filetypes": ["dart"]
+    \ { 'mode': 'active'
+    \ , 'passive_filetypes': ['dart', 'python']
     \ }
 
     noremap <leader>sc <ESC>:SyntasticCheck<CR>
@@ -372,7 +390,7 @@
 " }}}
 
 " Ag {{{
-let g:ackprg = 'ag --nogroup --nocolor --column --ignore=tags --skip-vcs-ignores'
+let g:ackprg = 'ag --nogroup --nocolor --column --ignore=tags --skip-vcs-ignores --ignore-case'
 cnoreabbrev <expr> ag getcmdtype()==':' && getcmdline()=='ag' ? 'Ack' : 'ag'
 " }}}
 
@@ -385,6 +403,7 @@ cnoreabbrev <expr> ag getcmdtype()==':' && getcmdline()=='ag' ? 'Ack' : 'ag'
     nmap <Leader>cc gcc
     vmap <Leader>cc gc
     au BufNewFile,BufRead *.proto setlocal commentstring=//%s
+    au BufNewFile,BufRead *.cabal setlocal commentstring=--%s
 " }}}
 
 " Session {{{
@@ -575,7 +594,7 @@ let g:erlang_tags_ignore = ["_build"]
         let b:statusline_trailing_space_warning = ''
         let trailing = search('\s$', 'nw')
         if trailing != 0
-          let b:statusline_trailing_space_warning ='[trailing ' . trailing . ']'
+          let b:statusline_trailing_space_warning ='[ts ' . trailing . ']'
         endif
       endif
       return b:statusline_trailing_space_warning
@@ -589,9 +608,9 @@ let g:erlang_tags_ignore = ["_build"]
         let spaces = search('^ \{' . &ts . ',}[^\t]', 'nw')
 
         if (tabs != 0) && (spaces != 0)
-          let b:statusline_tab_warning = '[mixed-indenting ' . spaces . '] '
+          let b:statusline_tab_warning = '[mi ' . tabs . ']'
         elseif (spaces && !&expandtab) || (tabs && &expandtab)
-          let b:statusline_tab_warning ='[expandtab ' . tabs . '] '
+          let b:statusline_tab_warning ='[expandtab ' . tabs . ']'
         endif
       endif
       return b:statusline_tab_warning
@@ -599,10 +618,10 @@ let g:erlang_tags_ignore = ["_build"]
     autocmd cursorhold,bufwritepost * unlet! b:statusline_tab_warning
 
     function! StatuslineTagbar()
-      let s = ''
+      let b:s = ''
       let tag = tagbar#currenttag('%s','')
-      let s = tag!='' ? '[' . tag . ']' : ''
-      return s
+      let b:s = tag!='' ? '[' . tag . ']' : ''
+      return b:s
     endfunction
 " }}}
 
@@ -628,16 +647,16 @@ let g:erlang_tags_ignore = ["_build"]
 " }}}
 
 " Google it {{{
-    function! s:google()
-      let url = 'https://www.google.com/search?q='
-      let q = substitute(
-            \ ''.@0.'',
-            \ '[^A-Za-z0-9_.~-]',
-            \ '\="%".printf("%02X", char2nr(submatch(0)))',
-            \ 'g')
-      call system('xdg-open ' . url . q)
-    endfunction
-    noremap <leader>? y:call <SID>google()<CR>
+    " function! s:google()
+    "   let url = 'https://www.google.com/search?q='
+    "   let q = substitute(
+    "         \ ''.@0.'',
+    "         \ '[^A-Za-z0-9_.~-]',
+    "         \ '\="%".printf("%02X", char2nr(submatch(0)))',
+    "         \ 'g')
+    "   call system('xdg-open ' . url . q)
+    " endfunction
+    " noremap <leader>? y:call <SID>google()<CR>
 " }}}
 
 " Work {{{
@@ -710,12 +729,6 @@ let g:erlang_tags_ignore = ["_build"]
 " Pandoc {{{
     let g:pandoc#modules#disabled = ["chdir", "spell"]
 " }}}
-
-" GitGutter {{{
-    let g:gitgutter_enabled = 0
-" }}}
-
-hi TabLineSel gui=reverse
 
 " vim:fdm=marker
 " vim:foldenable
