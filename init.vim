@@ -101,6 +101,8 @@
     set smartindent
     set autoindent
 
+    set hidden
+
     " Long lines
     set breakindent
     " Indent the wrapped line
@@ -248,6 +250,7 @@
     cmap w!! w !sudo tee > /dev/null %
 
     nnoremap <C-p> :Files<CR>
+    nnoremap <C-b> :Buffers<CR>
     autocmd! FileType fzf tnoremap <buffer> <ESC> <c-c>
 " }}}
 
