@@ -4,5 +4,6 @@
 
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/cuda/lib64:/opt/cuda/extras/CUPTI/lib64"
-export CUDA_HOME=/opt/cuda
+# OPAM configuration
+. /home/incomplete/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
+. /usr/bin/virtualenvwrapper.sh

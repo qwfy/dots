@@ -10,34 +10,37 @@
 
     Plug 'xolox/vim-misc'
     Plug 'xolox/vim-session'
+    Plug 'xolox/vim-easytags'
 
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
     Plug 'Shougo/neosnippet'
     Plug 'Shougo/neosnippet-snippets'
 
+    Plug 'tomtom/tcomment_vim'
+
     Plug 'tpope/vim-fugitive'
+    Plug 'scrooloose/nerdtree'
 
     Plug 'sjl/gundo.vim'
     Plug 'godlygeek/tabular'
-    Plug 'gorkunov/smartpairs.vim'      " viv
+    Plug 'gorkunov/smartpairs.vim'    " viv
     Plug 'henrik/vim-indexed-search'    " match M of N
     Plug 'majutsushi/tagbar'
-    Plug 'scrooloose/nerdtree'
     Plug 'thinca/vim-ref'
     Plug 'tmhedberg/matchit'    " use % to match more things
 
-    Plug 'tomtom/tcomment_vim'
-    Plug 'xolox/vim-easytags'
+    Plug 'qwfy/vim-slime'
 
     " languages
     Plug 'elmcast/elm-vim'
-    Plug 'vim-erlang/vim-erlang-tags'
 
     Plug 'eagletmt/neco-ghc'
-    Plug 'itchyny/vim-haskell-indent'
+    Plug 'neovimhaskell/haskell-vim'
 
     Plug 'hynek/vim-python-pep8-indent'
-    Plug 'davidhalter/jedi-vim'
+    Plug 'zchee/deoplete-jedi'
+
+    Plug 'brooth/far.vim' " find and replace
 
     call plug#end()
 
@@ -45,8 +48,8 @@
 
 " Vim Options {{{
     let $PATH.=':'.expand('~/bin')
+    let $PATH.=':'.expand('~/bin/nodejs/bin')
     let $PATH.=':'.expand('~/.local/bin')
-    let $PATH.=':'.expand('~/bin/erlang/18.3/bin')
     scriptencoding utf-8
     filetype plugin on
     filetype indent on
@@ -54,8 +57,11 @@
 
     set background=light
     colorscheme solarized
+    set guicursor=
+    set title
 
     let mapleader=","
+    let maplocalleader="\\"
 
     " File related
     set fileformat=unix
@@ -64,13 +70,14 @@
     set fileencodings=utf-8,gbk
     set encoding=utf-8
     set autoread
-    set noswapfile
+    autocmd BufEnter,FocusGained * checktime
+    set swapfile
     set backupdir=/tmp//,.
 
     set number
     set incsearch
     set hlsearch
-    set ignorecase
+    set ic
     set history=10000
     set laststatus=2
     set showcmd
@@ -101,7 +108,7 @@
     highlight! link NonText Character
     set showbreak=↳
 
-    set tags=tags,~/code/otp_src_18.2.1/tags,~/.python_tags
+    set termguicolors
 " }}}
 
 " Key Bindings {{{
@@ -115,14 +122,14 @@
     iabbrev fixme: FIXME incomplete:
 
     inoremap .. ->
-    inoremap ... ...
-    inoremap -> ..
-    inoremap << <-
-    " inoremap >> <<>>
+    inoremap ... ..
+    inoremap ,, <-
+    inoremap >> =>
+    inoremap >>> >>=
 
     inoremap ;; ::
-    inoremap ,, =>
     inoremap \\ (\)
+    tnoremap <ESC> <C-\><C-n>
 
 
     " For markdown headers
@@ -139,6 +146,9 @@
     inoremap ( ()<ESC>i
     inoremap [ []<ESC>i
     inoremap { {}<ESC>i
+    inoremap gul «
+    inoremap gur »
+    inoremap gup «»<ESC>i
 
     nnoremap ; :
     vnoremap ; :
@@ -148,10 +158,6 @@
     nnoremap <A-,> ^
     nnoremap <A-.> $
     nnoremap Y y$
-
-    vnoremap <C-S-C> "+y
-    nnoremap <C-S-V> "+p
-    inoremap <C-S-V> <ESC>"+pa
 
     " temporary, see https://github.com/equalsraf/neovim-qt/issues/215
     vnoremap <C-Insert> "+y
@@ -183,18 +189,33 @@
     noremap <F10>  <ESC>:GhcModType<CR>
     noremap <F11>  <ESC>:GhcModTypeClear<CR>
     noremap <F12> :%!python<CR>
+    " nnoremap <leader>2 :@x<CR>
 
     " Movement
     noremap <silent> <C-k> :wincmd k<CR>
     noremap <silent> <C-j> :wincmd j<CR>
     noremap <silent> <C-h> :wincmd h<CR>
     noremap <silent> <C-l> :wincmd l<CR>
+
+    tnoremap <silent> <C-k> <C-\><C-n>:wincmd k<CR>
+    tnoremap <silent> <C-j> <C-\><C-n>:wincmd j<CR>
+    tnoremap <silent> <C-h> <C-\><C-n>:wincmd h<CR>
+    tnoremap <silent> <C-l> <C-\><C-n>:wincmd l<CR>
+
     noremap <A-j> <ESC>:bn<CR>
     noremap <A-k> <ESC>:bp<CR>
     noremap <A-l> <ESC>:tabnext<CR>
     noremap <A-h> <ESC>:tabprev<CR>
     nnoremap <C-t> <ESC>:tabedit<CR>
-    nnoremap <SPACE> <PageDown>
+
+    tnoremap <A-j> <C-\><C-n>:bn<CR>
+    tnoremap <A-k> <C-\><C-n>:bp<CR>
+    tnoremap <A-l> <C-\><C-n>:tabnext<CR>
+    tnoremap <A-h> <C-\><C-n>:tabprev<CR>
+    tnoremap <C-t> <C-\><C-n>:tabedit<CR>
+
+    nnoremap <SPACE> <C-D>
+    nnoremap <S-SPACE> <C-U>
     vnoremap <SPACE> <PageDown>
     nnoremap <S-SPACE> <PageUp>
     vnoremap <S-SPACE> <PageUp>
@@ -217,15 +238,16 @@
     " Misc
     noremap <A-d> <ESC>:bd!<CR>
     noremap <A-w> <ESC>:wincmd c<CR>
-    map <DEL> ~
+    map <DEL> gU
 
     " Saving of files as sudo when I forgot to start vim using sudo.
     cmap w!! w !sudo tee > /dev/null %
 " }}}
 
 " Folding {{{
-    " Don't fold by default
     set nofoldenable
+    set fdm=indent
+    set foldnestmax=1
 
     " Remove the underline and use Solarized Color Scheme light as background color
     highlight Folded gui=NONE guibg=#FDF6E3
@@ -238,6 +260,7 @@
 " Tabular {{{
     vnoremap <silent> <leader>t :Tabular /
     vnoremap <silent> <leader>t: :Tabular /:\zs<CR>
+    " AddTabularPattern comma_first_list_of_tuples /[[,]\zs\ /l0
     " Enable some tabular presets for Haskell
     let g:haskell_tabular = 1
 " }}}
@@ -253,15 +276,21 @@
     let g:ctrlp_regexp=1
     let g:ctrlp_show_hidden=0
     let g:ctrlp_custom_ignore={
-        \ 'dir'  : '\v(\.git|\.hg|\.svn|packages|build|Mnesia\.node.*|data.run)$',
-        \ 'file' : '\v(\.hi|\.o|\.jpg|\.jpeg|\.bmp\.png\.exe|\.so|\.dll|\.beam|\.pyc|\~|\.xlsx\.docx)$',
-        \ 'link' : '\vpackages$'
+        \ 'dir'  : '\v(\.git|\.hg|\.svn|_build|elm\-stuff)$',
+        \ 'file' : '\v(\.hi|\.o|\.jpg|\.jpeg|\.bmp\.png\.exe|\.so|\.dll|\.beam|\.pyc|\.xlsx|\.docx|\.orig)$'
         \ }
+    " if executable('ag')
+    "     let g:ctrlp_user_command = 'ag '. "'%s'" . ' -l --nocolor -g ""'
+    "     let g:ctrlp_use_caching = 0
+    " else
+    "     let g:ctrlp_clear_cache_on_exit = 0
+    " endif
     noremap <Leader>m <Esc>:CtrlPMRU<CR>
 " }}}
 
 " NerdTree {{{
     noremap <A-n> :NERDTreeToggle<CR>
+    let g:NERDTreeMouseMode=2 " single click to open
     " let g:NERDTreeChDirMode=0 " never auto change cwd for vim
 " }}}
 
@@ -275,21 +304,11 @@
     autocmd FileType css           setlocal omnifunc=csscomplete#CompleteCSS
     autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
     autocmd FileType javascript    setlocal omnifunc=javascriptcomplete#CompleteJS
-    autocmd FileType python        setlocal omnifunc=jedi#completions
     autocmd FileType xml           setlocal omnifunc=xmlcomplete#CompleteTags
     autocmd FileType haskell       setlocal omnifunc=necoghc#omnifunc
 
-    let g:jedi#completions_enabled = 0
-    let g:jedi#auto_vim_configuration = 0
-    if !exists('g:deoplete#force_omni_input_patterns')
-            let g:deoplete#force_omni_input_patterns = {}
-    endif
-    let g:deoplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
-
     " Close the scratch window which is shown when working with python file
-    " set completeopt-=preview
-    " Close the preview window when completion is done
-    " au CompleteDone * pclose
+    set completeopt-=preview
 " }}}
 
 " NeoSnippet {{{
@@ -309,13 +328,16 @@
 " }}}
 
 " Ag {{{
-    let g:ackprg = 'ag --nogroup --nocolor --column --ignore=tags --skip-vcs-ignores --ignore-case'
-    cnoreabbrev <expr> ag getcmdtype()==':' && getcmdline()=='ag' ? 'Ack' : 'ag'
+    " let g:ackprg = 'ag --nogroup --nocolor --column --ignore=tags --skip-vcs-ignores --ignore-case'
+    let g:ackprg = 'rg --ignore-case --hidden --ignore-file=/home/incomplete/.rgignore --ignore-file=.rgignore --vimgrep'
+    cnoreabbrev <expr> ag getcmdtype()==':' && getcmdline()=='ag' ? 'Ack!' : 'ag'
 " }}}
 
 " tComment {{{
     nmap <Leader>cc gcc
     vmap <Leader>cc gc
+    nmap <Leader>ci :TCommentInline
+    vmap <Leader>ci :TCommentInline
     au BufNewFile,BufRead *.proto setlocal commentstring=//%s
     au BufNewFile,BufRead *.cabal setlocal commentstring=--%s
 " }}}
@@ -337,12 +359,11 @@
 "}}}
 
 " Remove Trailing Spaces {{{
-    autocmd FileType haskell,python,css,html,dart,javascript,sql,markdown autocmd BufWritePre <buffer> :%s/\s\+$//e
+    autocmd FileType vim,haskell,python,css,html,dart,javascript,sql,markdown,elm,ocaml autocmd BufWritePre <buffer> :%s/\s\+$//e
 " }}}
 
 " Erlang {{{
     autocmd FileType erlang setlocal iskeyword+=:
-    let g:erlang_tags_ignore = ["_build"]
 " }}}
 
 " HTML {{{
@@ -350,9 +371,11 @@
     autocmd BufNewFile,BufRead,BufReadPost *.mythcss setfiletype css
     autocmd BufWritePost *.mythcss silent execute '!myth --compress'.' '.shellescape(expand('%:p')).' '.shellescape(expand('%:r').'.css')
     autocmd BufNewFile,BufRead,BufReadPost *.djhtml setfiletype htmldjango
+    autocmd BufNewFile,BufRead,BufReadPost *.eliom setfiletype ocaml
+    autocmd BufNewFile,BufRead,BufReadPost *.eliomi setfiletype ocaml
 
     " Use two spaces as indent for these file types
-    autocmd FileType html,css,dart setlocal tabstop=2 softtabstop=2 shiftwidth=2
+    autocmd FileType html,css,dart,ocaml setlocal tabstop=2 softtabstop=2 shiftwidth=2
 " }}}
 
 " Rename {{{
@@ -420,6 +443,7 @@
     set statusline+=%=
 
     " git status
+    set statusline+=%{CurrentSessionStatusline()}
     set statusline+=%{fugitive#statusline()}
 
     " columns lines and percentage
@@ -429,9 +453,104 @@
 
     function! NeomakeStatus()
         let s = neomake#statusline#LoclistStatus()
-        return (s!='')?('['.s.']'):('')
+        return (s!='')?(s):('')
     endfunction
 
+" }}}
+
+" Slime {{{
+    let g:slime_target="neovim"
+    xmap <S-ENTER> <Plug>SlimeRegionSend
+    nmap <S-ENTER> <Plug>SlimeParagraphSend
+    let g:slime_python_ipython=1
+" }}}
+
+" Title String {{{
+    function! CurrentSession()
+        return xolox#session#find_current_session()
+    endfunction
+
+    function! CurrentSessionStatusline()
+        let s = CurrentSession()
+        return (s != '') ? ('[' . s . ']' ) : ('')
+    endfunction
+
+    function! SetTitleString()
+        let s = CurrentSession()
+        let ts = (s != '') ? (': ' . s) : ('% ' . fnamemodify(getcwd(), ':t'))
+        let &titlestring = ts
+        return
+    endfunction
+
+    augroup l_dirchanged
+        autocmd!
+        autocmd DirChanged * :call SetTitleString()
+    augroup END
+
+" }}}
+
+" OCaml {{{
+" ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
+let s:opam_share_dir = system("opam config var share")
+let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
+
+let s:opam_configuration = {}
+
+function! OpamConfOcpIndent()
+  execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
+endfunction
+let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
+
+function! OpamConfOcpIndex()
+  execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
+endfunction
+let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
+
+function! OpamConfMerlin()
+  let l:dir = s:opam_share_dir . "/merlin/vim"
+  execute "set rtp+=" . l:dir
+endfunction
+let s:opam_configuration['merlin'] = function('OpamConfMerlin')
+
+let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
+let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
+let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
+for tool in s:opam_packages
+  " Respect package order (merlin should be after ocp-index)
+  if count(s:opam_available_tools, tool) > 0
+    call s:opam_configuration[tool]()
+  endif
+endfor
+" ## end of OPAM user-setup addition for vim / base ## keep this line
+
+" ## added by OPAM user-setup for vim / ocp-indent ## f52b5826eb7d55a633f4864dd670870e ## you can edit, but keep this line
+if count(s:opam_available_tools,"ocp-indent") == 0
+  source "/home/incomplete/.opam/4.04.2/share/vim/syntax/ocp-indent.vim"
+endif
+" ## end of OPAM user-setup addition for vim / ocp-indent ## keep this line
+
+
+nnoremap <A-t> :MerlinTypeOf<CR>
+vnoremap <A-t> :MerlinTypeOf<CR>
+
+" }}}
+
+" elm-vim {{{
+let g:elm_format_autosave = 0
+" }}}
+
+" Customized Commands {{{
+    command Gitk :call jobstart("gitk -- \'" . expand("%:p") . "\'")
+
+    command! -nargs=* T split | terminal <args>
+    command! -nargs=* Vt vsplit | terminal <args>
+" }}}
+
+" Easytags {{{
+    let g:easytags_auto_highlight = 0
+    let g:easytags_async = 1
+    let g:easytags_by_filetype = '~/.tags/'
+    let g:easytags_suppress_report = 1
 " }}}
 
 " vim:fdm=marker

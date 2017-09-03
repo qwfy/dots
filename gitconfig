@@ -1,6 +1,6 @@
 [user]
     email = incomplete@aixon.co
-    name = Incomplete
+	name = Incomplete
 [push]
     default = current
 [branch]
@@ -29,10 +29,28 @@
 	tool = kdiff3
 	keepbackup = false
 [cola]
-	fontdiff = Input,9,-1,5,50,0,0,0,0,0
+	fontdiff = Input Mono,10,-1,5,50,0,0,0,0,0,Regular
 	tabwidth = 4
 [gui]
 	fontui = -family \"Noto Sans\" -size 9 -weight normal -slant roman -underline 0 -overstrike 0
 	fontdiff = -family Input -size 9 -weight normal -slant roman -underline 0 -overstrike 0
+	editor = nvim-qt
+	recentrepo = /home/incomplete/project/irrational
+	historybrowser = gitk
 [diff]
 	tool = kdiff3
+[https]
+    proxy = socks5://127.0.0.1:9050
+    #proxy = http://127.0.0.1:8123
+[url "git://github.com/ghc/packages-"]
+	insteadOf = git://github.com/ghc/packages/
+[url "http://github.com/ghc/packages-"]
+	insteadOf = http://github.com/ghc/packages/
+[url "https://github.com/ghc/packages-"]
+	insteadOf = https://github.com/ghc/packages/
+[url "ssh://git@github.com/ghc/packages-"]
+	insteadOf = ssh://git@github.com/ghc/packages/
+[url "git@github.com:/ghc/packages-"]
+	insteadOf = git@github.com:/ghc/packages/
+[mergetool]
+	keepBackup = false

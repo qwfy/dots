@@ -5,8 +5,10 @@ export HISTCONTROL=ignoredups:erasedups
 shopt -s histappend
 export PROMPT_COMMAND="history -a; history -c; history -r"
 export EDITOR=nvim
+#export OPAMUSEINTERNALSOLVER="true"
 
-export PATH=~/.local/bin/:~/bin/:$PATH:~/bin/erlang/18.3/bin
+export PATH=~/bin:~/bin/nodejs/bin:~/.local/bin:~/.go/bin:$PATH
+export GOPATH=~/.go/
 
 source /usr/share/git/completion/git-prompt.sh
 export GIT_PS1_SHOWDIRTYSTATE=1     # + for staged, * if unstaged.
@@ -27,6 +29,7 @@ alias ls='ls --color=auto'
 alias vir='vim -R'
 alias x='exit'
 alias sg='stack ghci'
+alias purgepkg='sudo pacman -R --cascade --nosave --recursive'
 alias bk='cd ../'
 alias bkk='cd ../../'
 alias bkkk='cd ../../../'
@@ -42,17 +45,8 @@ function refuck_ccp_and_that_bitchs_father_mother_brother_and_any_other_sucker {
     systemctl --user restart fuckccp.service
 }
 
-function update-vim-plugins {
-    orig_dir=$(pwd)
-
-    cd ~/.vim/bundle/
-    for d in *; do
-        cd "$d"
-        echo "Updating $d"
-        git pull
-        cd -
-    done
-    cd ~/.vim/bundle/vimproc.vim/ && make
-
-    cd "$orig_dir"
+function anyconnect {
+    sudo openconnect -c ~/bin/fuckccp.p12 a03.blockcn.net
 }
+
+source /usr/share/fzf/key-bindings.bash

@@ -1,734 +1,130 @@
-﻿" Vundle {{{
-    set nocompatible
-    filetype off
-
-    set rtp+=~/.vim/bundle/Vundle.vim
-    call vundle#begin()
-
-    Plugin 'VundleVim/Vundle.vim'
-
-    Plugin 'altercation/vim-colors-solarized'
-
-    Plugin 'kien/ctrlp.vim'
-    Plugin 'mileszs/ack.vim'
-    Plugin 'scrooloose/syntastic'
-    " Plugin 'w0rp/ale'
-    Plugin 'xolox/vim-session'
-
-    Plugin 'Shougo/neocomplete.vim'
-    Plugin 'Shougo/neosnippet'
-    Plugin 'Shougo/neosnippet-snippets'
-
-    Plugin 'sjl/gundo.vim'
-    Plugin 'airblade/vim-rooter'
-    Plugin 'Shougo/vimproc.vim'
-    Plugin 'dkprice/vim-easygrep'
-    Plugin 'godlygeek/tabular'
-    Plugin 'gorkunov/smartpairs.vim'      " viv
-    Plugin 'henrik/vim-indexed-search'    " match M of N
-    Plugin 'majutsushi/tagbar'
-    Plugin 'othree/xml.vim'
-    Plugin 'scrooloose/nerdtree'
-    Plugin 'thinca/vim-ref'
-    Plugin 'tmhedberg/matchit'
-    Plugin 'tomtom/tcomment_vim'
-    Plugin 'tpope/vim-fugitive'
-    Plugin 'tpope/vim-markdown'
-    Plugin 'tpope/vim-surround'
-    Plugin 'vim-pandoc/vim-pandoc'
-    Plugin 'vim-pandoc/vim-pandoc-after'
-    Plugin 'vim-pandoc/vim-pandoc-syntax'
-    Plugin 'vim-scripts/drawit'
-    Plugin 'xolox/vim-easytags'
-    Plugin 'xolox/vim-misc'
-
-    Plugin 'elmcast/elm-vim'
-    Plugin 'dart-lang/dart-vim-plugin'
-
-    Plugin 'vim-erlang/vim-erlang-tags'
-
-    Plugin 'Twinside/vim-hoogle'
-    Plugin 'eagletmt/ghcmod-vim'
-    Plugin 'eagletmt/neco-ghc'
-    Plugin 'itchyny/vim-haskell-indent'
-
-    Plugin 'hynek/vim-python-pep8-indent'
-    Plugin 'davidhalter/jedi-vim'
-
-    " LaTex
-    Plugin 'xuhdev/vim-latex-live-preview'
-
-    Plugin 'vim-scripts/LargeFile'
-
-    call vundle#end()
-    filetype plugin on
-    filetype indent on
-" }}}
-
-" VIM Options {{{
-    let $PATH.=':'.expand('~/bin')
-    let $PATH.=':'.expand('~/.local/bin')
-    scriptencoding utf-8
-    set nocompatible
-
-    " GUI stuff
-    if has('gui_running')
-        set background=light
-        set guioptions-=m
-        set guioptions-=T
-        set guioptions-=t
-        set guioptions+=b
-        set guicursor+=a:blinkon0 " do not blink cursor
-        set guifont=Input\ 9
-        colorscheme solarized
-    else
-        set background=dark
-    endif
-
-    set mousemodel=popup
-    let mapleader=","
-    syntax on
-
-    " File related
-    set fileformat=unix
-    set fileformats=unix,dos
-    set fileencoding=utf-8
-    set fileencodings=utf-8,gbk
-    set encoding=utf-8
-    set autoread
-    set noswapfile
-    set backupdir=/tmp//,.
-
-    set number
-    set incsearch
-    set hlsearch
-    set ignorecase
-    set history=10000
-    set laststatus=2
-    set showcmd
-    set wildignorecase
-
-    set conceallevel=2
-    set concealcursor=nc
-    hi clear Conceal
-
-    " Space and indent
-    set expandtab
-    set tabstop=4
-    set softtabstop=4
-    set shiftwidth=4
-    set smarttab
-    set backspace=indent,eol,start
-    set smartindent
-    set autoindent
-
-    " Long lines
-    set breakindent
-    " Indent the wrapped line
-
-    set nowrap
-    " When 'wrap' is off, use '»' as the last column to indicate a wrap
-    set listchars=extends:»
-
-    highlight! link NonText Character
-    set showbreak=↳
-
-    set tags=tags,~/code/otp_src_18.2.1/tags,~/.python_tags
-" }}}
-
-" Folding {{{
-    " Don't fold by default
-    set nofoldenable
-
-    " Remove the underline and use Solarized Color Scheme light as background color
-    highlight Folded gui=NONE guibg=#FDF6E3
-
-    " Toggle fold if there are any, otherwise do it supposed to do
-    noremap <expr> <2-LeftMouse> foldlevel(line('.'))==0 ? "\<2-LeftMouse>" : 'zA'
-    noremap <F1>  <ESC>zA:echom 'Toggle current fold recursively.'<CR>
-" }}}
-
-" Key Bindings {{{
-    " C-S
-    noremap  <C-S> :update<CR>
-    vnoremap <C-S> <C-C>:update<CR>
-    inoremap <C-S> <C-O>:update<CR>
-
-    " Abbr
-    iabbrev todo: TODO incomplete:
-    iabbrev fixme: FIXME incomplete:
-
-    inoremap .. ->
-    inoremap ... ...
-    inoremap -> ..
-    inoremap << <-
-    " inoremap >> <<>>
-
-    inoremap ;; ::
-    inoremap ,, =>
-    inoremap \\ (\)
-
-
-    " For markdown headers
-    inoremap <A-1> <ESC>VypVr=k$jo<ESC>o
-    inoremap <A-2> <ESC>VypVr-k$jo
-    nnoremap <A-1> <ESC>VypVr=k$jo<ESC>
-    nnoremap <A-2> <ESC>VypVr-k$jo<ESC>
-
-    " Pair
-    inoremap '' ''<ESC>i
-    inoremap "" ""<ESC>i
-    inoremap `` ``<ESC>i
-    inoremap <> <><ESC>i
-    inoremap ( ()<ESC>i
-    inoremap [ []<ESC>i
-    inoremap { {}<ESC>i
-
-    nnoremap ; :
-    vnoremap ; :
-    nnoremap : ;
-    vnoremap : ;
-
-    nnoremap <A-,> ^
-    nnoremap <A-.> $
-    nnoremap Y y$
-
-    vnoremap <C-Insert> "+y
-    nnoremap <S-Insert> "+p
-    inoremap <S-Insert> <ESC>"+pa
-
-    " nnoremap 0 ^
-    " nnoremap ^ 0
-
-    " Toggle command line window
-    noremap <A-;> q:
-    autocmd CmdwinEnter * noremap <buffer> <ESC> <ESC>:q<CR>
-
-    " Open help in new tab
-    cnoreabbrev <expr> h getcmdtype()==':' && getcmdline()=='h' ? 'tab help' : 'h'
-
-    nnoremap <leader>r :%s#<C-R><C-W>##g<Left><Left>
-    nnoremap <leader>R :%s#<C-R><C-A>##g<Left><Left>
-    vnoremap <leader>r "vy:%s#<C-R>v##g<Left><Left>
-    cnoremap <C-H> <Left>
-    cnoremap <C-L> <Right>
-
-    noremap <F2>  <ESC>:let @/ = expand('<cword>')\|set hlsearch<CR>
-    noremap <F3>  <ESC>:noh<CR>:echom 'Cancelled highlight'<CR>:redraw!<CR>
-    noremap <F4>  :s/^\(.\{-}\)\s*$/\1/g<CR><ESC>:noh<CR>:echom 'Trailing whitespaces removed'<CR>
-    noremap <F5>  :s/^\s*\(.\{-}\)\s*$/\1/g<CR><ESC>:noh<CR>:echom 'Leading and trailing whitespaces removed'<CR>
-    nnoremap <F6>  :exec 'silent !git difftool -y % &'<CR>:redraw!<CR>
-    nnoremap <C-F6>  :exec 'silent !gitk % &'<CR>:redraw!<CR>
-    noremap <F7>  <ESC><C-w>r<C-w>l<C-w>=
-    noremap <F8>  :TagbarToggle<CR>
-    noremap <F9>  <ESC>:setlocal wrap!<CR>
-    noremap <F10>  <ESC>:GhcModType<CR>
-    noremap <F11>  <ESC>:GhcModTypeClear<CR>
-    noremap <F12> :%!python<CR>
-
-    " Movement
-    noremap <silent> <C-k> :wincmd k<CR>
-    noremap <silent> <C-j> :wincmd j<CR>
-    noremap <silent> <C-h> :wincmd h<CR>
-    noremap <silent> <C-l> :wincmd l<CR>
-    noremap <A-j> <ESC>:bn<CR>
-    noremap <A-k> <ESC>:bp<CR>
-    noremap <A-l> <ESC>:tabnext<CR>
-    noremap <A-h> <ESC>:tabprev<CR>
-    nnoremap <C-t> <ESC>:tabedit<CR>
-    nnoremap <SPACE> <PageDown>
-    vnoremap <SPACE> <PageDown>
-    nnoremap <S-SPACE> <PageUp>
-    vnoremap <S-SPACE> <PageUp>
-    nnoremap j gj
-    vnoremap j gj
-    nnoremap k gk
-    vnoremap k gk
-
-    nnoremap <C-n> *
-
-    " Resize window
-    noremap <C-LEFT> <ESC>:vertical resize -1<CR>
-    noremap <C-RIGHT> <ESC>:vertical resize +1<CR>
-    noremap <C-UP> <ESC>:res +1<CR>
-    noremap <C-DOWN> <ESC>:res -1<CR>
-
-    " Spell checking
-    noremap <leader>sp :setlocal spell!<CR>
-
-    " Misc
-    noremap <A-d> <ESC>:bd!<CR>
-    noremap <A-w> <ESC>:wincmd c<CR>
-    map <DEL> ~
-
-    " Saving of files as sudo when I forgot to start vim using sudo.
-    cmap w!! w !sudo tee > /dev/null %
-" }}}
-
-" Tabular {{{
-    vnoremap <silent> <leader>t :Tabular /
-    vnoremap <silent> <leader>t: :Tabular /:\zs<CR>
-    " Enable some tabular presets for Haskell
-    let g:haskell_tabular = 1
-" }}}
-
-" CtrlP {{{
-    let g:ctrlp_open_multiple_files='rv'
-    let g:ctrlp_open_new_file = 'r'
-    let g:ctrlp_switch_buffer = 'h'
-
-    let g:ctrlp_clear_cache_on_exit=0
-    let g:ctrlp_working_path_mode='a'
-    let g:ctrlp_use_caching=1
-    let g:ctrlp_regexp=1
-    let g:ctrlp_show_hidden=0
-    let g:ctrlp_custom_ignore={
-        \ 'dir'  : '\v(\.git|\.hg|\.svn|packages|build|Mnesia\.node.*|data.run)$',
-        \ 'file' : '\v(\.hi|\.o|\.jpg|\.jpeg|\.bmp\.png\.exe|\.so|\.dll|\.beam|\.pyc|\~|\.xlsx\.docx)$',
-        \ 'link' : '\vpackages$'
-        \ }
-    noremap <Leader>m <Esc>:CtrlPMRU<CR>
-" }}}
-
-" NerdTree {{{
-    noremap <A-n> :NERDTreeToggle<CR>
-    let g:NERDTreeChDirMode=0 " never auto change cwd for vim
-" }}}
-
-" NeoComplete {{{
-    let g:neocomplete#enable_at_startup=1
-    let g:neocomplete#enable_smart_case=1
-    let g:neocomplete#force_overwrite_completefunc=1
-    inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-
-    " Enable omni completion.
-    autocmd FileType css           setlocal omnifunc=csscomplete#CompleteCSS
-    autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-    autocmd FileType javascript    setlocal omnifunc=javascriptcomplete#CompleteJS
-    autocmd FileType python        setlocal omnifunc=jedi#completions
-    autocmd FileType xml           setlocal omnifunc=xmlcomplete#CompleteTags
-
-    let g:jedi#completions_enabled = 0
-    let g:jedi#auto_vim_configuration = 0
-    if !exists('g:neocomplete#force_omni_input_patterns')
-            let g:neocomplete#force_omni_input_patterns = {}
-    endif
-    let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
-
-    " Close the scratch window which is shown when working with python file
-    " set completeopt-=preview
-    " Close the preview window when completion is done
-    " au CompleteDone * pclose
-" }}}
-
-" NeoSnippet {{{
-    let g:neosnippet#snippets_directory = expand('~/.vim/snippets/')
-    " SuperTab like snippets' behavior.
-    imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-        \ "\<Plug>(neosnippet_expand_or_jump)"
-        \ : pumvisible() ? "\<C-n>" : "\<TAB>"
-    "smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-    " \ "\<Plug>(neosnippet_expand_or_jump)"
-    " \: "\<TAB>"
-" }}}
-
-" Syntastic {{{
-    let g:syntastic_always_populate_loc_list = 1
-    let g:syntastic_error_symbol='E'
-    let g:syntastic_warning_symbol='W'
-
-    let g:syntastic_python_checkers=['pylint']
-    let g:syntastic_python_pylint_args='
-    \ -E
-    \ --disable=C0111,C0112,C0301,C0103,C0326,
-    \           W0603,W0614,W0401,W0703,W0702,W1202,
-    \           R0903
-    \ '
-
-    let g:syntastic_haskell_checkers=['hlint']
-    let g:syntastic_haskell_hlint_args='--ignore="Use camelCase"'
-
-    let g:syntastic_css_checkers=[]
-    let g:syntastic_css_csslint_options='
-    \ --ignore=ids,
-    \          unqualified-attributes,
-    \          universal-selector,
-    \          regex-selectors,
-    \          compatible-vendor-prefixes
-    \ '
-
-    let g:syntastic_sh_checkers=['shellcheck']
-
-    let g:syntastic_mode_map =
-    \ { 'mode': 'active'
-    \ , 'passive_filetypes': ['dart', 'python']
-    \ }
-
-    noremap <leader>sc <ESC>:SyntasticCheck<CR>
-" }}}
-
-" Rooter {{{
-    let g:rooter_autocmd_patterns = '*.hs,*.dart'
-    let g:rooter_use_lcd = 1
-" }}}
-
-" Easytags {{{
-    let g:easytags_auto_highlight=0
-    let g:easytags_auto_update = 0
-    let g:easytags_autorecurse = 1
-
-
-    let g:easytags_languages =
-    \ {'haskell':
-    \   { 'cmd': 'hasktags'
-    \   , 'args': []
-    \   , 'fileoutput_opt': '-f'
-    \   , 'stdout_opt': '-f-'
-    \   , 'recurse_flag': ''
-    \   }
-    \ }
-" }}}
-
-" Ag {{{
-let g:ackprg = 'ag --nogroup --nocolor --column --ignore=tags --skip-vcs-ignores --ignore-case'
-cnoreabbrev <expr> ag getcmdtype()==':' && getcmdline()=='ag' ? 'Ack' : 'ag'
-" }}}
-
-" EasyGrep {{{
-    let g:EasyGrepFilesToExclude=".git,.pub,packages,__pycache__"
-    nnoremap <leader>go <ESC>:GrepOptions<CR>
-" }}}
-
-" tComment {{{
-    nmap <Leader>cc gcc
-    vmap <Leader>cc gc
-    au BufNewFile,BufRead *.proto setlocal commentstring=//%s
-    au BufNewFile,BufRead *.cabal setlocal commentstring=--%s
-" }}}
-
-" Session {{{
-    set ssop-=options " do not store global and local values in a session
-    set ssop-=folds   " do not store folds
-    set ssop-=help
-    set ssop-=buffers " don't save hidden and unloaded buffers
-    let g:session_persist_font = 0
-    let g:session_persist_colors = 0
-    let g:session_autosave = 'yes'
-    let g:session_autosave_periodic = 30
-    let g:session_verbose_messages = 0
-    let g:session_autoload = 'no'
-    cnoreabbrev <expr> os getcmdtype()==':' && getcmdline()=='os' ? 'OpenSession!' : 'os'
-    cnoreabbrev <expr> ss getcmdtype()==':' && getcmdline()=='ss' ? 'SaveSession'  : 'ss'
-"}}}
-
-" VimPad {{{
-    let g:pad#dir = "~/Notes"
-    let g:pad#open_in_split = 0
-" }}}
-
-" For These File Types {{{
-    autocmd FileType haskell,python,css,html,dart,javascript,sql,markdown autocmd BufWritePre <buffer> :%s/\s\+$//e
-" }}}
-
-" Haskell {{{
-    " Show types in completion suggestions
-    let g:necoghc_enable_detailed_browse = 1
-
-    " Hoogle
-    let g:hoogle_search_count = 15
-    let g:hoogle_search_buffer_size = 15
-    cnoreabbrev <expr> hoogle getcmdtype()==':' && getcmdline()=='hoogle' ? 'Hoogle' : 'hoogle'
-    cnoreabbrev <expr> hoogleinfo getcmdtype()==':' && getcmdline()=='hoogleinfo' ? 'HoogleInfo' : 'hoogleinfo'
-    nnoremap <Leader>hh :Hoogle<CR>
-    nnoremap <Leader>hi :HoogleInfo<CR>
-    nnoremap <Leader>hc :HoogleClose<CR>
-
-    " GhcMod
-    nnoremap <Leader>tw :GhcModTypeInsert<CR>
-    nnoremap <Leader>ts :GhcModSplitFunCase<CR>
-    nnoremap <Leader>tq :GhcModType<CR>
-    nnoremap <Leader>te :GhcModTypeClear<CR>
-
-    " let g:haskell_classic_highlighting = 1
-
-    " Tagbar
-    let g:tagbar_type_haskell =
-    \  { 'ctagsbin': 'hasktags'
-    \  , 'ctagsargs': '-x -c -o-'
-    \  , 'sro': '.'
-    \  , 'kinds':
-    \      [ 'm:modules:0:1'
-    \      , 'd:data: 0:1'
-    \      , 'd_gadt: data gadt:0:1'
-    \      , 't:type names:0:1'
-    \      , 'nt:new types:0:1'
-    \      , 'c:classes:0:1'
-    \      , 'cons:constructors:1:1'
-    \      , 'c_gadt:constructor gadt:1:1'
-    \      , 'c_a:constructor accessors:1:1'
-    \      , 'ft:function types:1:1'
-    \      , 'fi:function implementations:0:1'
-    \      , 'o:others:0:1'
-    \      ]
-    \  , 'kind2scope':
-    \      { 'm': 'module'
-    \      , 'c': 'class'
-    \      , 'd': 'data'
-    \      , 't': 'type'
-    \      }
-    \  , 'scope2kind':
-    \      { 'module': 'm'
-    \      , 'class': 'c'
-    \      , 'data': 'd'
-    \      , 'type': 't'
-    \      }
-    \  }
-
-" }}}
-
-" Erlang {{{
-autocmd FileType erlang setlocal iskeyword+=:
-let g:erlang_tags_ignore = ["_build"]
-
-" }}}
-
-" Python {{{
-    " autocmd! FileType python setlocal nosmartindent
-" }}}
-
-" HTML Development {{{
-    " Treat .mythcss as CSS file, and auto compile it
-    autocmd BufNewFile,BufRead,BufReadPost *.mythcss setfiletype css
-    autocmd BufWritePost *.mythcss silent execute '!myth --compress'.' '.shellescape(expand('%:p')).' '.shellescape(expand('%:r').'.css')
-    autocmd BufNewFile,BufRead,BufReadPost *.djhtml setfiletype htmldjango
-
-    " Html funky comment to remove spaces between inline-blocks
-    vmap <leader>hf :s/^\(\s*\)</\1+--></g<CR>gv:s/>$/><!--+/g<CR><ESC>:noh<CR>
-    vmap <Leader>huf :s/\(+-->\\|<!--+\)//g<CR>:noh<CR>
-
-    " Use two spaces as indent for these file types
-    autocmd FileType html,css,dart setlocal tabstop=2 softtabstop=2 shiftwidth=2
-" }}}
-
-" Statusline {{{
-    set laststatus=2
-
-    " Modified flag
-    set statusline+=%#identifier#
-    set statusline+=%m
-    set statusline+=%*
-
-    " Read only flag
-    set statusline+=%#identifier#
-    set statusline+=%r
-    set statusline+=%*
-
-    " Warn if the file format is not UNIX
-    set statusline+=%#warningmsg#
-    set statusline+=%{&ff!='unix'?'['.&ff.']':''}
-    set statusline+=%*
-
-    " Warn if the file encoding is not UTF-8
-    set statusline+=%#warningmsg#
-    set statusline+=%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}
-    set statusline+=%*
-
-    set statusline+=%#warningmsg#
-    set statusline+=%{StatuslineTabWarning()}
-    set statusline+=%*
-    set statusline+=%#warningmsg#
-    set statusline+=%{StatuslineTrailingSpaceWarning()}
-    set statusline+=%*
-
-    set statusline+=%#warningmsg#
-    set statusline+=%{SyntasticStatuslineFlag()}
-    set statusline+=%*
-
-    " Help file flag
-    set statusline+=%h
-
-    set statusline+=%f
-
-    set statusline+=%= " Left/right separator
-
-    set statusline+=%{StatuslineTagbar()}
-    set statusline+=%{fugitive#statusline()}
-
-    set statusline+=\ C%c     " Cursor column
-    set statusline+=\ L%l/%L  " Cursor line/total lines
-
-    set statusline+=\ %{StatuslineWindowDim()}
-
-    set statusline+=\ %P     " Percent through file
-
-    " Return the editable dimension of the window
-    " FIXME The returned width considers only sign column, line number column and
-    "       the editing area. If other special columns are present, the returned
-    "       width will be strictly greater than the actual width.
-    function! StatuslineWindowDim()
-      let ww=winwidth(0)
-      if &number
-        let number_column_width = max([len(line('$')), &numberwidth-1]) + 1
-        let ww -= number_column_width
-      endif
-      if has('signs')
-        " If the sign column is shown, substract the width of sign column,
-        " that is always 2, from ww
-        redir =>sc_temp
-          exe 'sil sign place buffer='.bufnr('%')
-        redir end
-        let sc_list = split(sc_temp, '\n')
-        " If there are signs, then `sil sign place ...` will output:
-        " --- Signs ---
-        " Signs for <filename>
-        " <list of signs>
-        let sign_column_width = len(sc_list)>2 ? 2 : 0
-        let ww -= sign_column_width
-      endif
-
-      return ww . 'x' . winheight(0)
-    endfunction
-
-    function! StatuslineTrailingSpaceWarning()
-      if !exists("b:statusline_trailing_space_warning")
-        let b:statusline_trailing_space_warning = ''
-        let trailing = search('\s$', 'nw')
-        if trailing != 0
-          let b:statusline_trailing_space_warning ='[ts ' . trailing . ']'
-        endif
-      endif
-      return b:statusline_trailing_space_warning
-    endfunction
-    autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
-
-    function! StatuslineTabWarning()
-      if !exists("b:statusline_tab_warning")
-        let b:statusline_tab_warning = ''
-        let tabs = search('^\t', 'nw')
-        let spaces = search('^ \{' . &ts . ',}[^\t]', 'nw')
-
-        if (tabs != 0) && (spaces != 0)
-          let b:statusline_tab_warning = '[mi ' . tabs . ']'
-        elseif (spaces && !&expandtab) || (tabs && &expandtab)
-          let b:statusline_tab_warning ='[expandtab ' . tabs . ']'
-        endif
-      endif
-      return b:statusline_tab_warning
-    endfunction
-    autocmd cursorhold,bufwritepost * unlet! b:statusline_tab_warning
-
-    function! StatuslineTagbar()
-      let b:s = ''
-      let tag = tagbar#currenttag('%s','')
-      let b:s = tag!='' ? '[' . tag . ']' : ''
-      return b:s
-    endfunction
-" }}}
-
-" Rename {{{
-    command! -nargs=* -complete=file -bang Rename :call Rename("<args>", "<bang>")
-    function! Rename(name, bang)
-        let l:curfile = expand("%:p")
-        let l:curfilepath = expand("%:p:h")
-        let l:newname = l:curfilepath . "/" . a:name
-        let v:errmsg = ""
-        silent! exe "saveas" . a:bang . " " . l:newname
-        if v:errmsg =~# '^$\|^E329'
-            if expand("%:p") !=# l:curfile && filewritable(expand("%:p"))
-                silent exe "bwipe! " . l:curfile
-                if delete(l:curfile)
-                    echoerr "Could not delete " . l:curfile
-                endif
-            endif
-        else
-            echoerr v:errmsg
-        endif
-    endfunction
-" }}}
-
-" Google it {{{
-    " function! s:google()
-    "   let url = 'https://www.google.com/search?q='
-    "   let q = substitute(
-    "         \ ''.@0.'',
-    "         \ '[^A-Za-z0-9_.~-]',
-    "         \ '\="%".printf("%02X", char2nr(submatch(0)))',
-    "         \ 'g')
-    "   call system('xdg-open ' . url . q)
-    " endfunction
-    " noremap <leader>? y:call <SID>google()<CR>
-" }}}
-
-" Work {{{
-    function! GenSuperWingsErlc()
-        let cwd = getcwd()
-        return "!erlc"
-           \ . " -pa" . cwd . "/deps/lager/ebin"
-           \ . " -pa" . cwd . "/deps/dynarec/ebin"
-           \ . " -I"  . cwd . "/include"
-           \ . " -I"  . cwd . "/deps"
-           \ . " -o"  . cwd . "/ebin"
-           \ . " -Wall"
-           \ . " +'{parse_transform, lager_transform}'"
-           \ . " +'{lager_print_records_flag, false}'"
-           \ . " +debug_info"
-           \ . " +bin_opt_info"
-           \ . " " . expand('%:p')
-    endfunction
-    cnoreabbrev <expr> csw getcmdtype()==':' && getcmdline()=='csw' ? GenSuperWingsErlc() : 'csw'
-
-    function! GenThreeKingdomsErlc()
-        let cwd = getcwd()
-        return "!erlc"
-           \ . " -pa" . cwd . "/core/lager/ebin"
-           \ . " -I"  . cwd . "/core/"
-           \ . " -I"  . cwd . "/_build/default/lib/server/include"
-           \ . " -o"  . cwd . "/_build/default/lib/server/ebin"
-           \ . " -Wall"
-           \ . " +'{parse_transform, lager_transform}'"
-           \ . " +'{lager_print_records_flag, false}'"
-           \ . " +debug_info"
-           \ . " +bin_opt_info"
-           \ . " " . expand('%:p')
-    endfunction
-    cnoreabbrev <expr> ctk getcmdtype()==':' && getcmdline()=='ctk' ? GenThreeKingdomsErlc() : 'ctk'
-
-    function! ViewSuperWingsLog(...)
-        let host = a:1
-        let node_name = a:2
-        let base = ":r scp://root@" . host . "//data/sw_server/sw_log/" .node_name . "@" . node_name . ".sw.79643.com/server.log"
-        if a:0 == 2
-            " view the most recent log
-            exec base
-        elseif a:0 == 3
-            " view the specified log
-            exec base . "." . a:3
-        endif
-    endfunction
-    command -nargs=* Vl call ViewSuperWingsLog(<f-args>)
-
-    function! ViewTKLog(...)
-        let host = a:1
-        let node_name = a:2
-        let base = ":r scp://root@" . host . "//data/tk/ThreeKingdomsServer/logs/" .node_name . "@" . node_name . ".tk.79643.com/server.log"
-        if a:0 == 2
-            " view the most recent log
-            exec base
-        elseif a:0 == 3
-            " view the specified log
-            exec base . "." . a:3
-        endif
-    endfunction
-    command -nargs=* Vtk call ViewTKLog(<f-args>)
-" }}}
-
-" Markdown {{{
-    autocmd FileType markdown setlocal nobreakindent wrap showbreak=
-" }}}
-
-" Pandoc {{{
-    let g:pandoc#modules#disabled = ["chdir", "spell"]
-" }}}
-
-" vim:fdm=marker
-" vim:foldenable
+" sensible.vim - Defaults everyone can agree on
+" Maintainer:   Tim Pope <http://tpo.pe/>
+" Version:      1.1
+
+if &compatible
+  finish
+else
+  let g:loaded_sensible = 1
+endif
+
+if has('autocmd')
+  filetype plugin indent on
+endif
+if has('syntax') && !exists('g:syntax_on')
+  syntax enable
+endif
+
+" Use :help 'option' to see the documentation for the given option.
+
+set autoindent
+set backspace=indent,eol,start
+set complete-=i
+set smarttab
+
+set nrformats-=octal
+
+set ttimeout
+set ttimeoutlen=100
+
+set incsearch
+" Use <C-L> to clear the highlighting of :set hlsearch.
+if maparg('<C-L>', 'n') ==# ''
+  nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
+endif
+
+set laststatus=2
+set ruler
+set showcmd
+set wildmenu
+
+if !&scrolloff
+  set scrolloff=1
+endif
+if !&sidescrolloff
+  set sidescrolloff=5
+endif
+set display+=lastline
+
+if &encoding ==# 'latin1' && has('gui_running')
+  set encoding=utf-8
+endif
+
+if &listchars ==# 'eol:$'
+  set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
+endif
+
+if v:version > 703 || v:version == 703 && has("patch541")
+  set formatoptions+=j " Delete comment character when joining commented lines
+endif
+
+if has('path_extra')
+  setglobal tags-=./tags tags^=./tags;
+endif
+
+if &shell =~# 'fish$'
+  set shell=/bin/bash
+endif
+
+set autoread
+set fileformats+=mac
+
+if &history < 1000
+  set history=1000
+endif
+if &tabpagemax < 50
+  set tabpagemax=50
+endif
+if !empty(&viminfo)
+  set viminfo^=!
+endif
+set sessionoptions-=options
+
+" Allow color schemes to do bright colors without forcing bold.
+if &t_Co == 8 && $TERM !~# '^linux'
+  set t_Co=16
+endif
+
+" Load matchit.vim, but only if the user hasn't installed a newer version.
+if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
+  runtime! macros/matchit.vim
+endif
+
+inoremap <C-U> <C-G>u<C-U>
+" ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
+let s:opam_share_dir = system("opam config var share")
+let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
+
+let s:opam_configuration = {}
+
+function! OpamConfOcpIndent()
+  execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
+endfunction
+let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
+
+function! OpamConfOcpIndex()
+  execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
+endfunction
+let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
+
+function! OpamConfMerlin()
+  let l:dir = s:opam_share_dir . "/merlin/vim"
+  execute "set rtp+=" . l:dir
+endfunction
+let s:opam_configuration['merlin'] = function('OpamConfMerlin')
+
+let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
+let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
+let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
+for tool in s:opam_packages
+  " Respect package order (merlin should be after ocp-index)
+  if count(s:opam_available_tools, tool) > 0
+    call s:opam_configuration[tool]()
+  endif
+endfor
+" ## end of OPAM user-setup addition for vim / base ## keep this line
+" ## added by OPAM user-setup for vim / ocp-indent ## f52b5826eb7d55a633f4864dd670870e ## you can edit, but keep this line
+if count(s:opam_available_tools,"ocp-indent") == 0
+  source "/home/incomplete/.opam/4.04.2/share/vim/syntax/ocp-indent.vim"
+endif
+" ## end of OPAM user-setup addition for vim / ocp-indent ## keep this line

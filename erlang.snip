@@ -1,6 +1,6 @@
 snippet gen_server
 options head
-    -module(${1}).
+    -module(${0}).
 
     -behaviour(gen_server).
 
@@ -43,7 +43,7 @@ options head
 
 snippet gen_fsm
 options head
-    -module(${1}).
+    -module(${0}).
 
     -behaviour(gen_fsm).
 
@@ -89,7 +89,7 @@ options head
 
 snippet supervisor
 options head
-    -module(${1}_sup).
+    -module(${0}_sup).
 
     -behaviour(supervisor).
 
@@ -115,14 +115,14 @@ options head
 
 snippet application
 options head
-    -module(${1}_app).
+    -module(${0}_app).
 
     -behaviour(application).
 
     -export([start/2, stop/1]).
 
     start(_StartType, _StartArgs) ->
-        {ok, SupPid} = ${2}_sup:start_link(),
+        {ok, SupPid} = ${1}_sup:start_link(),
         {ok, SupPid}.
 
     stop(_State) ->
@@ -131,80 +131,80 @@ options head
 
 snippet -record
 options head
-    -record(${1}, {}).
+    -record(${0}, {}).
 
 snippet -include
 options head
-    -include("${1}.hrl").
+    -include("${0}.hrl").
 
 snippet ioformat0
-  io:format("${1}~n"),
+  io:format("${0}~n"),
 
 snippet ioformat
-  io:format("${1}~p~n", []),
+  io:format("${0}~p~n", []),
 
 snippet case
-    case ${1} of
+    case ${0} of
     end,
 
 snippet iftrue
-    if ${1} ->
+    if ${0} ->
        true ->
     end,
 
 snippet fun
-    fun(${1}) ->
+    fun(${0}) ->
     end,
 
 snippet funend
-    fun(${1}) -> ${2} end,
+    fun(${0}) -> ${1} end,
 
 snippet filter
     lists:filter(fun() ->
-                 end, ${1}),
+                 end, ${0}),
 
 snippet map
     lists:map(fun() ->
-              end, ${1}),
+              end, ${0}),
 
 snippet filtermap
     lists:filtermap(fun() ->
-                    end, ${1}),
+                    end, ${0}),
 snippet foreach
     lists:foreach(fun() ->
-                  end, ${1}),
+                  end, ${0}),
 
 snippet foldl
     lists:foldl(fun() ->
-                end, , ${1}),
+                end, , ${0}),
 
 snippet foldr
     lists:foldr(fun() ->
-                end, , ${1}),
+                end, , ${0}),
 
 snippet comprehension
-    [ || <- ${1}],
+    [ || <- ${0}],
 
 snippet qlc
-    {atomic, } = mnesia:transaction(fun() -> qlc:e(qlc:q([ || <- mnesia:table(${1})])) end)
+    {atomic, } = mnesia:transaction(fun() -> qlc:e(qlc:q([ || <- mnesia:table(${0})])) end)
 
 snippet gencall
-    gen_server:call(${1})
+    gen_server:call(${0})
 
 snippet gencast
-    gen_server:cast(${1})
+    gen_server:cast(${0})
 
 snippet handle_call
 options head
-    handle_call({${1}}, _From, State) ->
+    handle_call({${0}}, _From, State) ->
     {reply, Reply, NewState};
 
 snippet handle_cast
 options head
-    handle_cast({${1}}, _From, State) ->
+    handle_cast({${0}}, _From, State) ->
     {noreply, NewState};
 
 snippet handle_info
 options head
-    handle_info(${1}, State) ->
+    handle_info(${0}, State) ->
     {noreply, NewState};
