@@ -4,9 +4,10 @@
     Plug 'equalsraf/neovim-gui-shim'
     Plug 'frankier/neovim-colors-solarized-truecolor-only'
 
-    Plug 'kien/ctrlp.vim'
     Plug 'mileszs/ack.vim'
     Plug 'neomake/neomake'
+    Plug 'junegunn/fzf'
+    Plug 'junegunn/fzf.vim'
 
     Plug 'xolox/vim-misc'
     Plug 'xolox/vim-session'
@@ -21,7 +22,6 @@
     Plug 'tpope/vim-fugitive'
     Plug 'scrooloose/nerdtree'
 
-    Plug 'sjl/gundo.vim'
     Plug 'godlygeek/tabular'
     Plug 'gorkunov/smartpairs.vim'    " viv
     Plug 'henrik/vim-indexed-search'    " match M of N
@@ -43,6 +43,8 @@
     Plug 'brooth/far.vim' " find and replace
 
     Plug 'waiting-for-dev/vim-www'
+
+    " Plug 'vim-multiple-cursors'
 
     call plug#end()
 
@@ -244,6 +246,9 @@
 
     " Saving of files as sudo when I forgot to start vim using sudo.
     cmap w!! w !sudo tee > /dev/null %
+
+    nnoremap <C-p> :Files<CR>
+    autocmd! FileType fzf tnoremap <buffer> <ESC> <c-c>
 " }}}
 
 " Folding {{{
@@ -267,27 +272,8 @@
     let g:haskell_tabular = 1
 " }}}
 
-" CtrlP {{{
-    let g:ctrlp_open_multiple_files='rv'
-    let g:ctrlp_open_new_file = 'r'
-    let g:ctrlp_switch_buffer = 'h'
-
-    let g:ctrlp_clear_cache_on_exit=0
-    let g:ctrlp_working_path_mode='a'
-    let g:ctrlp_use_caching=1
-    let g:ctrlp_regexp=1
-    let g:ctrlp_show_hidden=0
-    let g:ctrlp_custom_ignore={
-        \ 'dir'  : '\v(\.git|\.hg|\.svn|_build|elm\-stuff)$',
-        \ 'file' : '\v(\.hi|\.o|\.jpg|\.jpeg|\.bmp\.png\.exe|\.so|\.dll|\.beam|\.pyc|\.xlsx|\.docx|\.orig)$'
-        \ }
-    " if executable('ag')
-    "     let g:ctrlp_user_command = 'ag '. "'%s'" . ' -l --nocolor -g ""'
-    "     let g:ctrlp_use_caching = 0
-    " else
-    "     let g:ctrlp_clear_cache_on_exit = 0
-    " endif
-    noremap <Leader>m <Esc>:CtrlPMRU<CR>
+" Fzf {{{
+    let g:fzf_buffers_jump = 0
 " }}}
 
 " NerdTree {{{
@@ -324,14 +310,8 @@
     " \: "\<TAB>"
 " }}}
 
-" Rooter {{{
-    " let g:rooter_autocmd_patterns = '*.hs,*.dart'
-    " let g:rooter_use_lcd = 1
-" }}}
-
 " Ag {{{
-    " let g:ackprg = 'ag --nogroup --nocolor --column --ignore=tags --skip-vcs-ignores --ignore-case'
-    let g:ackprg = 'rg --ignore-case --hidden --ignore-file=/home/incomplete/.rgignore --ignore-file=.rgignore --vimgrep'
+    let g:ackprg = 'rg --vimgrep --hidden --ignore-case --glob "!_build/*" --glob "!elm-stuff/*" --glob "!node_modules/*" --glob "!.git/*" --glob "!.svn/*"'
     cnoreabbrev <expr> ag getcmdtype()==':' && getcmdline()=='ag' ? 'Ack!' : 'ag'
 " }}}
 
@@ -408,58 +388,6 @@
     autocmd! BufWritePost * Neomake
 " }}}
 
-" Statusline {{{
-    set statusline=
-
-    " modified flag
-    set statusline+=%#identifier#
-    set statusline+=%m
-    set statusline+=%*
-
-    " read only flag
-    set statusline+=%#identifier#
-    set statusline+=%r
-    set statusline+=%*
-
-    " warn if the file format is not UNIX
-    set statusline+=%#warningmsg#
-    set statusline+=%{&ff!='unix'?'['.&ff.']':''}
-    set statusline+=%*
-
-    " warn if the file encoding is not UTF-8
-    set statusline+=%#warningmsg#
-    set statusline+=%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}
-    set statusline+=%*
-
-    " neomake
-    set statusline+=%#warningmsg#
-    set statusline+=%{NeomakeStatus()}
-    set statusline+=%*
-
-    " help file flag
-    set statusline+=%h
-
-    set statusline+=%f
-
-    " left/right separator
-    set statusline+=%=
-
-    " git status
-    set statusline+=%{CurrentSessionStatusline()}
-    set statusline+=%{fugitive#statusline()}
-
-    " columns lines and percentage
-    set statusline+=\ C%c
-    set statusline+=\ L%l/%L
-    set statusline+=\ %P
-
-    function! NeomakeStatus()
-        let s = neomake#statusline#LoclistStatus()
-        return (s!='')?(s):('')
-    endfunction
-
-" }}}
-
 " Slime {{{
     let g:slime_target="neovim"
     xmap <S-ENTER> <Plug>SlimeRegionSend
@@ -477,9 +405,18 @@
         return (s != '') ? ('[' . s . ']' ) : ('')
     endfunction
 
+    function! CurrentFileAndDirectory()
+        let current_file = expand('%:t')
+        let current_dir = fnamemodify(getcwd(), ':t')
+        if current_file == ''
+            return '∅ ' . current_dir
+        else
+            return current_file . ' ∈ ' . current_dir
+    endfunction
+
     function! SetTitleString()
         let s = CurrentSession()
-        let ts = (s != '') ? (': ' . s) : ('% ' . fnamemodify(getcwd(), ':t'))
+        let ts = (s != '') ? ('{' . s . '}') : CurrentFileAndDirectory()
         let &titlestring = ts
         return
     endfunction
@@ -488,6 +425,9 @@
         autocmd!
         autocmd DirChanged * :call SetTitleString()
     augroup END
+
+    autocmd BufEnter * :call SetTitleString()
+    :call SetTitleString()
 
 " }}}
 
@@ -537,8 +477,8 @@ vnoremap <A-t> :MerlinTypeOf<CR>
 
 " }}}
 
-" elm-vim {{{
-let g:elm_format_autosave = 0
+" Elm vim {{{
+    let g:elm_format_autosave = 0
 " }}}
 
 " Customized Commands {{{
@@ -571,6 +511,71 @@ let g:elm_format_autosave = 0
       \ 'translate': ['Translate', '<leader>tran'],
       \ 'oald': ['Oald', '<leader>ox']
     \}
+
+" }}}
+
+" Multi Cursor {{{
+    " let g:multi_cursor_start_key='<C-m>'
+    " let g:multi_cursor_next_key = '<C-m>'
+    " let g:multi_cursor_exit_from_insert_mode = 0
+    " let g:multi_cursor_exit_from_visual_mode = 0
+" }}}
+
+" Far {{{
+    let g:far#preview_window_height = 30
+    let g:far#repl_devider = '  ➜  '
+    let far#highlight_match = 0
+" }}}
+
+" Statusline {{{
+    set statusline=
+
+    " modified flag
+    set statusline+=%#identifier#
+    set statusline+=%m
+    set statusline+=%*
+
+    " read only flag
+    set statusline+=%#identifier#
+    set statusline+=%r
+    set statusline+=%*
+
+    " warn if the file format is not UNIX
+    set statusline+=%#warningmsg#
+    set statusline+=%{&ff!='unix'?'['.&ff.']':''}
+    set statusline+=%*
+
+    " warn if the file encoding is not UTF-8
+    set statusline+=%#warningmsg#
+    set statusline+=%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}
+    set statusline+=%*
+
+    " neomake
+    set statusline+=%#warningmsg#
+    set statusline+=%{NeomakeStatus()}
+    set statusline+=%*
+
+    " help file flag
+    set statusline+=%h
+
+    set statusline+=%f
+
+    " left/right separator
+    set statusline+=%=
+
+    " git status
+    set statusline+=%{CurrentSessionStatusline()}
+    set statusline+=%{fugitive#statusline()}
+
+    " columns lines and percentage
+    set statusline+=\ C%c
+    set statusline+=\ L%l/%L
+    set statusline+=\ %P
+
+    function! NeomakeStatus()
+        let s = neomake#statusline#LoclistStatus()
+        return (s!='')?(s):('')
+    endfunction
 
 " }}}
 

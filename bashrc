@@ -18,15 +18,18 @@ export GIT_PS1_SHOWUPSTREAM='auto'  # <,>,<> behind, ahead, or diverged from ups
 
 export PS1='\[\e[32m\][\u@\h \w$(__git_ps1 " (%s)")]\[\e[0m\]\n\[\e[32m\]<<\[\e[0m\] '
 
+export FZF_DEFAULT_COMMAND='rg --files --hidden --ignore-case --glob "!_build/*" --glob "!elm-stuff/*" --glob "!node_modules/*" --glob "!.git/*" --glob "!.svn/*"'
+
 # aliases
+alias v='nvim-qt'
 alias vi='nvim'
 alias vim='nvim'
+alias vir='vim -R'
 alias hs='history | grep -i'
 alias l='ls'
 alias la='ls -a'
 alias ll='ls -lh'
 alias ls='ls --color=auto'
-alias vir='vim -R'
 alias x='exit'
 alias sg='stack ghci'
 alias purgepkg='sudo pacman -R --cascade --nosave --recursive'
