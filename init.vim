@@ -42,6 +42,8 @@
 
     Plug 'brooth/far.vim' " find and replace
 
+    Plug 'waiting-for-dev/vim-www'
+
     call plug#end()
 
 " }}}
@@ -551,6 +553,25 @@ let g:elm_format_autosave = 0
     let g:easytags_async = 1
     let g:easytags_by_filetype = '~/.tags/'
     let g:easytags_suppress_report = 1
+" }}}
+
+" WWW {{{
+    let g:www_engines = {
+      \ 'oald' : 'https://en.oxforddictionaries.com/definition/{{QUERY}}',
+      \ 'hoogle' : 'https://www.stackage.org/lts-9.2/hoogle?q={{QUERY}}',
+      \ 'translate' : 'https://translate.google.com/#auto/en/{{QUERY}}'
+      \ }
+
+    let g:www_default_search_engine = 'devdocs'
+
+    let g:www_shortcut_engines = {
+      \ 'google': ['Google', '<leader>goo'],
+      \ 'devdocs': ['Devdocs', '<leader>dd'],
+      \ 'hoogle': ['Hoogle', '<leader>hoo'],
+      \ 'translate': ['Translate', '<leader>tran'],
+      \ 'oald': ['Oald', '<leader>ox']
+    \}
+
 " }}}
 
 " vim:fdm=marker
