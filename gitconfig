@@ -21,8 +21,9 @@
     sp = stash pop
     sd = stash drop
     sa = stash apply
-# [pager]
-#     show = "vim -R \"+set filetype=${1##*.}\" -"
+[pager]
+    # show = "nvim -R -c \"set filetype=${1##*.}\" -"
+    # diff = "nvim -R -c \"set filetype=diff\" -"
 [pull]
     rebase = false
 [merge]
@@ -31,6 +32,7 @@
 [cola]
 	fontdiff = Input Mono,10,-1,5,50,0,0,0,0,0,Regular
 	tabwidth = 4
+	spellcheck = true
 [gui]
 	fontui = -family \"Noto Sans\" -size 9 -weight normal -slant roman -underline 0 -overstrike 0
 	fontdiff = -family Input -size 9 -weight normal -slant roman -underline 0 -overstrike 0
@@ -41,7 +43,6 @@
 	tool = kdiff3
 [https]
     proxy = socks5://127.0.0.1:9050
-    #proxy = http://127.0.0.1:8123
 [url "git://github.com/ghc/packages-"]
 	insteadOf = git://github.com/ghc/packages/
 [url "http://github.com/ghc/packages-"]
@@ -54,3 +55,8 @@
 	insteadOf = git@github.com:/ghc/packages/
 [mergetool]
 	keepBackup = false
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

@@ -1,2 +1,2 @@
-GuiFont Input\ Mono:h9
+GuiFont Input\ Mono:h10
 :call SetTitleString()

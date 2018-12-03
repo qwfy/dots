@@ -1,4 +1,6 @@
-:set prompt "\ESC[32m[%s]\nλ \ESC[m"
+:set prompt "\ESC[32mλ \ESC[m"
 :set -XTupleSections
+:set +s
+:set +t
 :def hh \x -> return $ ":!hoogle \"" ++ x ++ "\""
 :def ii \x -> return $ ":!hoogle --info \"" ++ x ++ "\""

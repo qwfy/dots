@@ -20,17 +20,17 @@ options head
 
     handle_call(Request, _From, State) ->
         error_logger:warning_report([{unhandled_call, Request}]),
-        {noreply, State}.
+        {reply, Reply, NewState}.
 
 
     handle_cast(Request, State) ->
         error_logger:warning_report([{unhandled_cast, Request}]),
-        {noreply, State}.
+        {noreply, NewState}.
 
 
     handle_info(Info, State) ->
         error_logger:warning_report([{unhandled_info, Info}]),
-        {noreply, State}.
+        {noreply, NewState}.
 
 
     terminate(_Reason, _State) ->
